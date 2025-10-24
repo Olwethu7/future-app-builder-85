@@ -9,14 +9,18 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute = ({ children, requireAdmin = false }: ProtectedRouteProps) => {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, isAdmin } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isLoading && !user) {
-      navigate("/login", { replace: true });
+    if (!isLoading) {
+      if (!user) {
+        navigate("/login", { replace: true });
+      } else if (requireAdmin && !isAdmin) {
+        navigate("/", { replace: true });
+      }
     }
-  }, [user, isLoading, navigate]);
+  }, [user, isLoading, isAdmin, requireAdmin, navigate]);
 
   if (isLoading) {
     return (
@@ -31,6 +35,10 @@ export const ProtectedRoute = ({ children, requireAdmin = false }: ProtectedRout
   }
 
   if (!user) {
+    return null;
+  }
+
+  if (requireAdmin && !isAdmin) {
     return null;
   }
 

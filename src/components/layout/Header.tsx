@@ -16,7 +16,7 @@ interface HeaderProps {
 }
 
 export const Header = ({ onMenuToggle }: HeaderProps) => {
-  const { user, signOut } = useAuth();
+  const { user, signOut, isAdmin } = useAuth();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -71,6 +71,15 @@ export const Header = ({ onMenuToggle }: HeaderProps) => {
                   <UserIcon className="mr-2 h-4 w-4" />
                   My Bookings
                 </DropdownMenuItem>
+                {isAdmin && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => navigate("/admin")}>
+                      <UserIcon className="mr-2 h-4 w-4" />
+                      Admin Dashboard
+                    </DropdownMenuItem>
+                  </>
+                )}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleSignOut}>
                   <LogOut className="mr-2 h-4 w-4" />
