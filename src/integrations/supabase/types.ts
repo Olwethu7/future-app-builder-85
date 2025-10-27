@@ -23,8 +23,11 @@ export type Database = {
           description: string | null
           id: string
           images: string[] | null
+          location: string | null
           name: string
           price_per_night: number | null
+          sustainability_features: string[] | null
+          sustainability_rating: number | null
           type: string | null
           virtual_tour_url: string | null
         }
@@ -36,8 +39,11 @@ export type Database = {
           description?: string | null
           id?: string
           images?: string[] | null
+          location?: string | null
           name: string
           price_per_night?: number | null
+          sustainability_features?: string[] | null
+          sustainability_rating?: number | null
           type?: string | null
           virtual_tour_url?: string | null
         }
@@ -49,8 +55,11 @@ export type Database = {
           description?: string | null
           id?: string
           images?: string[] | null
+          location?: string | null
           name?: string
           price_per_night?: number | null
+          sustainability_features?: string[] | null
+          sustainability_rating?: number | null
           type?: string | null
           virtual_tour_url?: string | null
         }
@@ -200,10 +209,12 @@ export type Database = {
           available: boolean | null
           category: Database["public"]["Enums"]["experience_category"]
           created_at: string | null
+          cultural_authenticity_badge: boolean | null
           description: string | null
           duration: number | null
           id: string
           images: string[] | null
+          location: string | null
           max_participants: number | null
           price: number | null
           title: string
@@ -212,10 +223,12 @@ export type Database = {
           available?: boolean | null
           category: Database["public"]["Enums"]["experience_category"]
           created_at?: string | null
+          cultural_authenticity_badge?: boolean | null
           description?: string | null
           duration?: number | null
           id?: string
           images?: string[] | null
+          location?: string | null
           max_participants?: number | null
           price?: number | null
           title: string
@@ -224,10 +237,12 @@ export type Database = {
           available?: boolean | null
           category?: Database["public"]["Enums"]["experience_category"]
           created_at?: string | null
+          cultural_authenticity_badge?: boolean | null
           description?: string | null
           duration?: number | null
           id?: string
           images?: string[] | null
+          location?: string | null
           max_participants?: number | null
           price?: number | null
           title?: string

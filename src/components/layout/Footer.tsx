@@ -1,4 +1,4 @@
-import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from "lucide-react";
+import { Facebook, MessageCircle, Mail, Phone, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const Footer = () => {
@@ -13,14 +13,15 @@ export const Footer = () => {
               Authentic eco-tourism experiences in the heart of KwaZulu-Natal
             </p>
             <div className="flex gap-3">
-              <Button size="icon" variant="ghost" className="hover:bg-background/20">
-                <Facebook className="h-5 w-5" />
+              <Button size="icon" variant="ghost" className="hover:bg-background/20" asChild>
+                <a href="https://www.facebook.com/p/zululami-eco-resort-61566039264553/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                  <Facebook className="h-5 w-5" />
+                </a>
               </Button>
-              <Button size="icon" variant="ghost" className="hover:bg-background/20">
-                <Instagram className="h-5 w-5" />
-              </Button>
-              <Button size="icon" variant="ghost" className="hover:bg-background/20">
-                <Twitter className="h-5 w-5" />
+              <Button size="icon" variant="ghost" className="hover:bg-background/20" asChild>
+                <a href="https://wa.me/27832841272" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+                  <MessageCircle className="h-5 w-5" />
+                </a>
               </Button>
             </div>
           </div>
@@ -36,7 +37,7 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Experiences */}
+          {/* Explore */}
           <div>
             <h4 className="font-montserrat font-semibold mb-4">Explore</h4>
             <ul className="space-y-2 text-sm">
@@ -53,22 +54,26 @@ export const Footer = () => {
             <ul className="space-y-3 text-sm">
               <li className="flex items-start gap-2">
                 <MapPin className="h-4 w-4 mt-1 flex-shrink-0" />
-                <span className="opacity-90">KwaZulu-Natal, South Africa</span>
+                <span className="opacity-90">Zululami Road, Othobothini, Jozini, 3969, KwaZulu-Natal, South Africa</span>
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="h-4 w-4 flex-shrink-0" />
-                <span className="opacity-90">+27 (0) 123 456 789</span>
+                <a href="tel:+27796560543" className="opacity-90 hover:opacity-100 transition-opacity">+27 79 656 0543</a>
+              </li>
+              <li className="flex items-center gap-2">
+                <MessageCircle className="h-4 w-4 flex-shrink-0" />
+                <a href="https://wa.me/27832841272" target="_blank" rel="noopener noreferrer" className="opacity-90 hover:opacity-100 transition-opacity">+27 83 284 1272</a>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="h-4 w-4 flex-shrink-0" />
-                <span className="opacity-90">info@zululami.co.za</span>
+                <a href="mailto:ncadmin@estatesales.co.za" className="opacity-90 hover:opacity-100 transition-opacity">ncadmin@estatesales.co.za</a>
               </li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-background/20 pt-8 text-center text-sm opacity-90">
-          <p>&copy; {new Date().getFullYear()} Zulu Lami Eco-Resort. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Zulu Lami Eco Resort. All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -23,6 +23,13 @@ const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
 const AdminBookings = lazy(() => import("./pages/admin/AdminBookings"));
 const AdminRooms = lazy(() => import("./pages/admin/AdminRooms"));
 const AdminContent = lazy(() => import("./pages/admin/AdminContent"));
+const AboutUs = lazy(() => import("./pages/AboutUs"));
+const Contact = lazy(() => import("./pages/Contact"));
+const Sustainability = lazy(() => import("./pages/Sustainability"));
+const CulturalHeritage = lazy(() => import("./pages/CulturalHeritage"));
+const Settings = lazy(() => import("./pages/Settings"));
+const Help = lazy(() => import("./pages/Help"));
+const LocalArea = lazy(() => import("./pages/LocalArea"));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -61,6 +68,13 @@ const App = () => (
             <Route path="/register" element={<Register />} />
             <Route path="/accommodation/:id" element={<AccommodationDetail />} />
             <Route path="/booking/:id" element={<Booking />} />
+            <Route path="/about" element={<AboutUs />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/sustainability" element={<Sustainability />} />
+            <Route path="/cultural-heritage" element={<CulturalHeritage />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/help" element={<Help />} />
+            <Route path="/local-area" element={<LocalArea />} />
             
             {/* Protected Routes */}
             <Route
