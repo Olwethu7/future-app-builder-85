@@ -2,6 +2,7 @@ import { AdminSidebar } from "@/components/layout/AdminSidebar";
 import { DashboardStats } from "@/components/admin/DashboardStats";
 import { RecentBookings } from "@/components/admin/RecentBookings";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Link } from "react-router-dom";
 
 const AdminDashboard = () => {
   return (
@@ -27,33 +28,33 @@ const AdminDashboard = () => {
               <CardTitle>Quick Actions</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <a
-                href="/admin/bookings"
+              <Link
+                to="/admin/bookings"
                 className="block p-4 rounded-lg border hover:bg-muted/50 transition-colors"
               >
                 <p className="font-semibold">Manage Bookings</p>
                 <p className="text-sm text-muted-foreground">
                   View and update reservations
                 </p>
-              </a>
-              <a
-                href="/admin/rooms"
+              </Link>
+              <Link
+                to="/admin/rooms"
                 className="block p-4 rounded-lg border hover:bg-muted/50 transition-colors"
               >
                 <p className="font-semibold">Manage Accommodations</p>
                 <p className="text-sm text-muted-foreground">
                   Update inventory and pricing
                 </p>
-              </a>
-              <a
-                href="/admin/content"
+              </Link>
+              <Link
+                to="/admin/content"
                 className="block p-4 rounded-lg border hover:bg-muted/50 transition-colors"
               >
                 <p className="font-semibold">Content Management</p>
                 <p className="text-sm text-muted-foreground">
                   Upload photos and manage listings
                 </p>
-              </a>
+              </Link>
             </CardContent>
           </Card>
         </div>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, useSearchParams, useNavigate } from "react-router-dom";
+import { useParams, useSearchParams, useNavigate, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -175,13 +175,13 @@ const Booking = () => {
                     className="text-sm leading-relaxed cursor-pointer"
                   >
                     I agree to the{" "}
-                    <a href="/terms" className="text-primary underline">
+                    <Link to="/terms" className="text-primary underline">
                       Terms of Service
-                    </a>{" "}
+                    </Link>{" "}
                     and{" "}
-                    <a href="/privacy" className="text-primary underline">
+                    <Link to="/privacy" className="text-primary underline">
                       Privacy Policy
-                    </a>
+                    </Link>
                   </label>
                 </div>
 
