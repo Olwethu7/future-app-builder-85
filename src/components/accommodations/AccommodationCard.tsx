@@ -64,7 +64,7 @@ export const AccommodationCard = ({ accommodation }: AccommodationCardProps) => 
           className="w-full" 
           onClick={() => navigate(`/accommodation/${accommodation.id}`)}
         >
-          View Details
+          Book Now
         </Button>
       </CardFooter>
     </Card>

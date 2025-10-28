@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { useParams, useSearchParams, useNavigate, Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/layout/Layout";
 import { BookingSummary } from "@/components/booking/BookingSummary";
 import { GuestInfoForm } from "@/components/booking/GuestInfoForm";
@@ -14,9 +12,9 @@ import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { roomTypes } from "@/data/roomTypesData";
 
 const bookingSchema = z.object({
   firstName: z.string().min(1, "First name is required").max(50),
@@ -62,19 +60,8 @@ const Booking = () => {
     children: parseInt(searchParams.get("children") || "0"),
   };
 
-  const { data: accommodation, isLoading, error } = useQuery({
-    queryKey: ["accommodation", id],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("accommodations")
-        .select("*")
-        .eq("id", id)
-        .maybeSingle();
-      
-      if (error) throw error;
-      return data;
-    },
-  });
+  // Find accommodation from room types data
+  const accommodation = roomTypes.find(room => room.id === id);
 
   const onSubmit = async (values: BookingFormValues) => {
     if (!acceptedTerms) {
@@ -110,31 +97,14 @@ const Booking = () => {
     }
   };
 
-  if (isLoading) {
-    return (
-      <Layout>
-        <div className="container py-8">
-          <Skeleton className="h-12 w-64 mb-8" />
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 space-y-6">
-              <Skeleton className="h-96" />
-              <Skeleton className="h-64" />
-            </div>
-            <Skeleton className="h-96" />
-          </div>
-        </div>
-      </Layout>
-    );
-  }
-
-  if (error || !accommodation) {
+  if (!accommodation) {
     return (
       <Layout>
         <div className="container py-16">
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
-              {error ? "Failed to load accommodation" : "Accommodation not found"}
+              Room type not found
             </AlertDescription>
           </Alert>
         </div>

@@ -1,7 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import { AccommodationCard } from "@/components/accommodations/AccommodationCard";
-import { Skeleton } from "@/components/ui/skeleton";
+import { roomTypes } from "@/data/roomTypesData";
 import {
   Carousel,
   CarouselContent,
@@ -11,19 +9,8 @@ import {
 } from "@/components/ui/carousel";
 
 export const FeaturedAccommodations = () => {
-  const { data: accommodations, isLoading } = useQuery({
-    queryKey: ["featured-accommodations"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("accommodations")
-        .select("*")
-        .eq("available", true)
-        .limit(6);
-      
-      if (error) throw error;
-      return data;
-    },
-  });
+  // Use room types data instead of fetching from database
+  const accommodations = roomTypes.filter(room => room.id !== "event-hall");
 
   return (
     <section className="py-16 bg-muted/30">
@@ -37,31 +24,23 @@ export const FeaturedAccommodations = () => {
           </p>
         </div>
 
-        {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, i) => (
-              <Skeleton key={i} className="h-80 rounded-lg" />
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          className="w-full"
+        >
+          <CarouselContent>
+            {accommodations?.map((accommodation) => (
+              <CarouselItem key={accommodation.id} className="md:basis-1/2 lg:basis-1/3">
+                <AccommodationCard accommodation={accommodation} />
+              </CarouselItem>
             ))}
-          </div>
-        ) : (
-          <Carousel
-            opts={{
-              align: "start",
-              loop: true,
-            }}
-            className="w-full"
-          >
-            <CarouselContent>
-              {accommodations?.map((accommodation) => (
-                <CarouselItem key={accommodation.id} className="md:basis-1/2 lg:basis-1/3">
-                  <AccommodationCard accommodation={accommodation} />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
-        )}
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
       </div>
     </section>
   );
