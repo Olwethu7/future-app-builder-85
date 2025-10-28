@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { AccommodationCard } from "@/components/accommodations/AccommodationCard";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,8 +9,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { FilterState } from "./SearchFilters";
-import { MapPin, LayoutGrid } from "lucide-react";
-import { roomTypes } from "@/data/roomTypesData";
+import { MapPin, LayoutGrid, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface SearchResultsProps {
   filters: FilterState;
@@ -21,11 +21,49 @@ export const SearchResults = ({ filters, searchParams }: SearchResultsProps) => 
   const [sortBy, setSortBy] = useState("price-asc");
   const [viewMode, setViewMode] = useState<"grid" | "map">("grid");
   const [page, setPage] = useState(1);
+  const [rooms, setRooms] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const itemsPerPage = 9;
 
+  useEffect(() => {
+    const fetchRooms = async () => {
+      setIsLoading(true);
+      const { data } = await supabase
+        .from("rooms")
+        .select("*")
+        .eq("available", true);
+      
+      if (data) {
+        setRooms(data);
+      }
+      setIsLoading(false);
+    };
+
+    fetchRooms();
+
+    // Real-time subscription for room updates
+    const channel = supabase
+      .channel("rooms-changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "rooms",
+        },
+        () => {
+          fetchRooms();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
   const accommodations = useMemo(() => {
-    // Start with room types data
-    let filtered = [...roomTypes];
+    let filtered = [...rooms];
 
     // Apply price filter
     filtered = filtered.filter(
@@ -57,13 +95,21 @@ export const SearchResults = ({ filters, searchParams }: SearchResultsProps) => 
     }
 
     return filtered;
-  }, [filters, searchParams, sortBy]);
+  }, [rooms, filters, searchParams, sortBy]);
 
   const totalPages = Math.ceil((accommodations?.length || 0) / itemsPerPage);
   const paginatedResults = accommodations?.slice(
     (page - 1) * itemsPerPage,
     page * itemsPerPage
   );
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   if (!accommodations || accommodations.length === 0) {
     return (
@@ -81,12 +127,12 @@ export const SearchResults = ({ filters, searchParams }: SearchResultsProps) => 
   return (
     <div>
       {/* Controls */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
         <p className="text-muted-foreground">
           {accommodations.length} {accommodations.length === 1 ? "property" : "properties"} found
         </p>
         
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 w-full sm:w-auto">
           <div className="flex items-center gap-2">
             <Button
               variant={viewMode === "grid" ? "default" : "outline"}

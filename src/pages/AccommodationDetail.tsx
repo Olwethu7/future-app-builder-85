@@ -6,14 +6,39 @@ import { ReviewsSection } from "@/components/accommodations/ReviewsSection";
 import { BookingWidget } from "@/components/accommodations/BookingWidget";
 import { NearbyExperiences } from "@/components/accommodations/NearbyExperiences";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
-import { roomTypes } from "@/data/roomTypesData";
+import { AlertCircle, Loader2 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const AccommodationDetail = () => {
   const { id } = useParams();
 
-  // Find accommodation from room types data
-  const accommodation = roomTypes.find(room => room.id === id);
+  const { data: room, isLoading } = useQuery({
+    queryKey: ["room", id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("rooms")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!id,
+  });
+
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="container py-16 flex items-center justify-center min-h-[400px]">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      </Layout>
+    );
+  }
+
+  const accommodation = room;
 
   if (!accommodation) {
     return (
@@ -22,7 +47,7 @@ const AccommodationDetail = () => {
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
-              Room type not found
+              Room not found
             </AlertDescription>
           </Alert>
         </div>
@@ -30,7 +55,7 @@ const AccommodationDetail = () => {
     );
   }
 
-  const images = accommodation.images;
+  const images = accommodation.images || [];
 
   return (
     <Layout>

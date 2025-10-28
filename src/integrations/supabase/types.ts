@@ -372,6 +372,7 @@ export type Database = {
           images: string[] | null
           name: string
           price_per_night: number
+          quantity: number
           room_type: string
           updated_at: string
         }
@@ -386,6 +387,7 @@ export type Database = {
           images?: string[] | null
           name: string
           price_per_night: number
+          quantity?: number
           room_type: string
           updated_at?: string
         }
@@ -400,6 +402,7 @@ export type Database = {
           images?: string[] | null
           name?: string
           price_per_night?: number
+          quantity?: number
           room_type?: string
           updated_at?: string
         }
@@ -468,6 +471,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_room_availability: {
+        Args: { p_check_in: string; p_check_out: string; p_room_id: string }
+        Returns: number
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

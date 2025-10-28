@@ -8,12 +8,14 @@ interface Accommodation {
   id: string;
   name: string;
   description: string | null;
-  type: string | null;
+  room_type?: string | null;
+  type?: string | null;
   price_per_night: number | null;
   capacity: number | null;
   images: string[] | null;
   amenities: string[] | null;
   available: boolean | null;
+  quantity?: number;
 }
 
 interface AccommodationCardProps {
@@ -23,6 +25,8 @@ interface AccommodationCardProps {
 export const AccommodationCard = ({ accommodation }: AccommodationCardProps) => {
   const navigate = useNavigate();
   const imageUrl = accommodation.images?.[0] || "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2070";
+  const roomType = accommodation.room_type || accommodation.type;
+  const quantity = accommodation.quantity || 0;
 
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group">
@@ -31,10 +35,13 @@ export const AccommodationCard = ({ accommodation }: AccommodationCardProps) => 
         style={{ backgroundImage: `url(${imageUrl})` }}
         onClick={() => navigate(`/accommodation/${accommodation.id}`)}
       >
-        <div className="absolute top-4 right-4">
+        <div className="absolute top-4 right-4 flex gap-2 flex-col items-end">
           <Badge className="bg-primary/90 text-background backdrop-blur">
             <Leaf className="w-3 h-3 mr-1" />
             Eco-Friendly
+          </Badge>
+          <Badge variant={quantity > 0 ? "default" : "destructive"} className="backdrop-blur">
+            {quantity} available
           </Badge>
         </div>
       </div>
@@ -63,8 +70,9 @@ export const AccommodationCard = ({ accommodation }: AccommodationCardProps) => 
         <Button 
           className="w-full" 
           onClick={() => navigate(`/accommodation/${accommodation.id}`)}
+          disabled={quantity === 0}
         >
-          Book Now
+          {quantity > 0 ? "Book Now" : "Sold Out"}
         </Button>
       </CardFooter>
     </Card>

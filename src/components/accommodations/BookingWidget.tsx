@@ -4,10 +4,12 @@ import { Calendar } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 import { DateRangePicker } from "@/components/search/DateRangePicker";
 import { GuestSelector } from "@/components/search/GuestSelector";
 import { DateRange } from "react-day-picker";
 import { format, differenceInDays } from "date-fns";
+import { useRoomAvailability } from "@/hooks/useRoomAvailability";
 
 interface BookingWidgetProps {
   accommodationId: string;
@@ -18,6 +20,12 @@ export const BookingWidget = ({ accommodationId, pricePerNight }: BookingWidgetP
   const navigate = useNavigate();
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [guests, setGuests] = useState({ adults: 2, children: 0 });
+
+  const { data: availableRooms } = useRoomAvailability(
+    accommodationId,
+    dateRange?.from,
+    dateRange?.to
+  );
 
   const nights = dateRange?.from && dateRange?.to
     ? differenceInDays(dateRange.to, dateRange.from)
@@ -41,14 +49,19 @@ export const BookingWidget = ({ accommodationId, pricePerNight }: BookingWidgetP
     navigate(`/booking/${accommodationId}?${params.toString()}`);
   };
 
-  const canReserve = dateRange?.from && dateRange?.to && nights > 0;
+  const canReserve = dateRange?.from && dateRange?.to && nights > 0 && availableRooms && availableRooms > 0;
 
   return (
     <Card className="sticky top-24">
       <CardHeader>
-        <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-bold text-primary">R{pricePerNight}</span>
-          <span className="text-muted-foreground">/ night</span>
+        <div className="flex items-baseline justify-between">
+          <div className="flex items-baseline gap-2">
+            <span className="text-3xl font-bold text-primary">R{pricePerNight}</span>
+            <span className="text-muted-foreground">/ night</span>
+          </div>
+          <Badge variant={availableRooms && availableRooms > 0 ? "default" : "destructive"}>
+            {availableRooms || 0} available
+          </Badge>
         </div>
       </CardHeader>
       
@@ -94,7 +107,11 @@ export const BookingWidget = ({ accommodationId, pricePerNight }: BookingWidgetP
           disabled={!canReserve}
           onClick={handleReserve}
         >
-          {canReserve ? "Reserve" : "Select dates"}
+          {!availableRooms || availableRooms === 0
+            ? "Sold Out"
+            : canReserve
+            ? "Reserve"
+            : "Select dates"}
         </Button>
       </CardFooter>
     </Card>

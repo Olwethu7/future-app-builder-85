@@ -1,5 +1,6 @@
 import { AccommodationCard } from "@/components/accommodations/AccommodationCard";
-import { roomTypes } from "@/data/roomTypesData";
+import { useAccommodations } from "@/hooks/useAccommodations";
+import { Loader2 } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
@@ -9,8 +10,19 @@ import {
 } from "@/components/ui/carousel";
 
 export const FeaturedAccommodations = () => {
-  // Use room types data instead of fetching from database
-  const accommodations = roomTypes.filter(room => room.id !== "event-hall");
+  const { data: accommodations, isLoading } = useAccommodations();
+  
+  const featured = accommodations?.filter(acc => acc.type !== 'Event Space').slice(0, 3);
+
+  if (isLoading) {
+    return (
+      <section className="py-16 bg-muted/30">
+        <div className="container px-4 flex items-center justify-center min-h-[400px]">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-16 bg-muted/30">
@@ -32,7 +44,7 @@ export const FeaturedAccommodations = () => {
           className="w-full"
         >
           <CarouselContent>
-            {accommodations?.map((accommodation) => (
+            {featured?.map((accommodation) => (
               <CarouselItem key={accommodation.id} className="md:basis-1/2 lg:basis-1/3">
                 <AccommodationCard accommodation={accommodation} />
               </CarouselItem>

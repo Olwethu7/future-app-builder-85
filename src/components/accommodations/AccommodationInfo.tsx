@@ -16,7 +16,8 @@ import {
 interface AccommodationInfoProps {
   accommodation: {
     name: string;
-    type: string | null;
+    room_type?: string | null;
+    type?: string | null;
     description: string | null;
     capacity: number | null;
     amenities: string[] | null;
@@ -33,12 +34,14 @@ const amenityIcons: Record<string, any> = {
 };
 
 export const AccommodationInfo = ({ accommodation }: AccommodationInfoProps) => {
+  const roomType = accommodation.room_type || accommodation.type;
+  
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <div className="flex items-start justify-between mb-2">
-          <div>
+        <div className="flex items-start justify-between mb-2 flex-wrap gap-4">
+          <div className="flex-1">
             <h1 className="font-montserrat text-3xl md:text-4xl font-bold text-primary mb-2">
               {accommodation.name}
             </h1>
@@ -53,13 +56,13 @@ export const AccommodationInfo = ({ accommodation }: AccommodationInfoProps) => 
           </Badge>
         </div>
         
-        <div className="flex items-center gap-4 text-sm text-muted-foreground mt-3">
+        <div className="flex items-center gap-4 text-sm text-muted-foreground mt-3 flex-wrap">
           <div className="flex items-center gap-1">
             <Users className="w-4 h-4" />
             <span>Up to {accommodation.capacity || 2} guests</span>
           </div>
-          <Separator orientation="vertical" className="h-4" />
-          <span className="capitalize">{accommodation.type || "Eco-Lodge"}</span>
+          <Separator orientation="vertical" className="h-4 hidden sm:block" />
+          <span className="capitalize">{roomType || "Eco-Lodge"}</span>
         </div>
       </div>
 
@@ -81,7 +84,7 @@ export const AccommodationInfo = ({ accommodation }: AccommodationInfoProps) => 
             <CardTitle className="text-lg">What this place offers</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {accommodation.amenities.map((amenity, index) => {
                 const Icon = amenityIcons[amenity] || Check;
                 return (
