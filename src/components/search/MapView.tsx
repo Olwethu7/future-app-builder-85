@@ -33,7 +33,7 @@ export const MapView = ({ accommodations }: MapViewProps) => {
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v12",
-      center: [30.5595, -29.8587], // KwaZulu-Natal coordinates
+      center: [32.065038, -27.414692], // Othobothini, South Africa
       zoom: 8,
     });
 
@@ -45,7 +45,7 @@ export const MapView = ({ accommodations }: MapViewProps) => {
       if (accommodation.location) {
         // In real app, parse location coordinates
         const marker = new mapboxgl.Marker({ color: "#1B4332" })
-          .setLngLat([30.5595 + Math.random() * 0.5, -29.8587 + Math.random() * 0.5])
+          .setLngLat([32.065038 + Math.random() * 0.5, -27.414692 + Math.random() * 0.5])
           .setPopup(
             new mapboxgl.Popup({ offset: 25 }).setHTML(
               `<div class="p-2">
