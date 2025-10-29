@@ -142,6 +142,16 @@ const Login = () => {
                       </p>
                     )}
                   </div>
+                  <div className="flex justify-end">
+                    <Button
+                      type="button"
+                      variant="link"
+                      className="px-0 text-sm"
+                      onClick={() => navigate("/forgot-password")}
+                    >
+                      Forgot password?
+                    </Button>
+                  </div>
                 </CardContent>
                 <CardFooter>
                   <Button

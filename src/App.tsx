@@ -19,6 +19,8 @@ const Profile = lazy(() => import("./pages/Profile"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const AccommodationDetail = lazy(() => import("./pages/AccommodationDetail"));
 const Booking = lazy(() => import("./pages/Booking"));
 const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
@@ -76,8 +78,10 @@ const App = () => {
             <Route path="/" element={<Index />} />
             <Route path="/search" element={<Search />} />
             <Route path="/experiences" element={<Experiences />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/accommodation/:id" element={<AccommodationDetail />} />
             <Route path="/booking/:id" element={<Booking />} />
             <Route path="/about" element={<AboutUs />} />
