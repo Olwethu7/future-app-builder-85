@@ -86,6 +86,23 @@ export const GuestInfoForm = ({ form }: GuestInfoFormProps) => {
 
         <FormField
           control={form.control}
+          name="idNumber"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>ID Number *</FormLabel>
+              <FormControl>
+                <Input placeholder="ID or Passport Number" {...field} />
+              </FormControl>
+              <FormDescription>
+                Required for check-in verification
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
           name="specialRequests"
           render={({ field }) => (
             <FormItem>

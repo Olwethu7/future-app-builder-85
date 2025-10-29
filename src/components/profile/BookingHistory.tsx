@@ -21,10 +21,14 @@ export const BookingHistory = () => {
         .from("bookings")
         .select(`
           *,
-          accommodations (
+          rooms (
             name,
-            type,
-            images
+            room_type,
+            images,
+            accommodations (
+              name,
+              type
+            )
           )
         `)
         .eq("user_id", user.id)
@@ -75,57 +79,70 @@ export const BookingHistory = () => {
     );
   }
 
-  const BookingCard = ({ booking }: { booking: any }) => (
-    <Card>
-      <CardContent className="p-4">
-        <div className="flex gap-4">
-          <img
-            src={booking.accommodations?.images?.[0] || "/placeholder.svg"}
-            alt={booking.accommodations?.name}
-            className="w-32 h-32 rounded-lg object-cover"
-          />
-          <div className="flex-1 space-y-2">
-            <div className="flex items-start justify-between">
-              <div>
-                <h3 className="font-semibold text-lg">
-                  {booking.accommodations?.name}
-                </h3>
-                <p className="text-sm text-muted-foreground capitalize">
-                  {booking.accommodations?.type || "Eco-Lodge"}
-                </p>
+  const BookingCard = ({ booking }: { booking: any }) => {
+    const roomName = booking.rooms?.name || "Room";
+    const accommodationName = booking.rooms?.accommodations?.name || "Zulu Lami Eco-Resort";
+    const roomImage = booking.rooms?.images?.[0] || "/placeholder.svg";
+    
+    return (
+      <Card>
+        <CardContent className="p-4">
+          <div className="flex gap-4">
+            <img
+              src={roomImage}
+              alt={roomName}
+              className="w-32 h-32 rounded-lg object-cover"
+            />
+            <div className="flex-1 space-y-2">
+              <div className="flex items-start justify-between">
+                <div>
+                  <h3 className="font-semibold text-lg">
+                    {roomName}
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    {accommodationName}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-1 items-end">
+                  <Badge className={getStatusColor(booking.status)}>
+                    {booking.status}
+                  </Badge>
+                  {booking.payment_status && (
+                    <Badge variant="outline" className="text-xs">
+                      Payment: {booking.payment_status}
+                    </Badge>
+                  )}
+                </div>
               </div>
-              <Badge className={getStatusColor(booking.status)}>
-                {booking.status}
-              </Badge>
-            </div>
-            
-            <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-              <div className="flex items-center gap-1">
-                <Calendar className="w-4 h-4" />
-                <span>
-                  {booking.check_in_date && format(new Date(booking.check_in_date), "MMM dd")} - 
-                  {booking.check_out_date && format(new Date(booking.check_out_date), " MMM dd, yyyy")}
-                </span>
+              
+              <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                <div className="flex items-center gap-1">
+                  <Calendar className="w-4 h-4" />
+                  <span>
+                    {booking.check_in_date && format(new Date(booking.check_in_date), "MMM dd")} - 
+                    {booking.check_out_date && format(new Date(booking.check_out_date), " MMM dd, yyyy")}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Users className="w-4 h-4" />
+                  <span>{booking.guests} guests</span>
+                </div>
               </div>
-              <div className="flex items-center gap-1">
-                <Users className="w-4 h-4" />
-                <span>{booking.guests} guests</span>
-              </div>
-            </div>
 
-            <div className="flex items-center justify-between pt-2">
-              <span className="font-semibold text-primary">
-                R{booking.total_price}
-              </span>
-              <Button size="sm" variant="outline">
-                View Details
-              </Button>
+              <div className="flex items-center justify-between pt-2">
+                <span className="font-semibold text-primary">
+                  R{Number(booking.total_price).toFixed(2)}
+                </span>
+                <Button size="sm" variant="outline">
+                  View Details
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
+        </CardContent>
+      </Card>
+    );
+  };
 
   return (
     <Tabs defaultValue="all" className="w-full">

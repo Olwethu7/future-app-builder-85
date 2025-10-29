@@ -23,6 +23,7 @@ const bookingSchema = z.object({
   lastName: z.string().min(1, "Last name is required").max(50),
   email: z.string().email("Invalid email address"),
   phone: z.string().min(10, "Phone number must be at least 10 digits"),
+  idNumber: z.string().min(5, "ID number is required").max(20),
   specialRequests: z.string().max(500).optional(),
 });
 
@@ -49,6 +50,7 @@ const Booking = () => {
       lastName: "",
       email: user?.email || "",
       phone: "",
+      idNumber: "",
       specialRequests: "",
     },
   });
@@ -126,9 +128,14 @@ const Booking = () => {
     try {
       const nights = differenceInDays(checkOut, checkIn);
       const totalGuests = guests.adults + guests.children;
-      const totalPrice = nights * (room.price_per_night || 0) * 1.1; // Including 10% service fee
+      const subtotal = nights * (room.price_per_night || 0);
+      const serviceFee = subtotal * 0.1; // 10% service fee
+      const totalPrice = subtotal + serviceFee;
 
-      const { error } = await supabase
+      // Generate booking reference number
+      const bookingRef = `ZL-${Date.now()}-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
+
+      const { data: bookingData, error } = await supabase
         .from("bookings")
         .insert({
           user_id: user.id,
@@ -138,18 +145,28 @@ const Booking = () => {
           check_out_date: checkOut.toISOString().split('T')[0],
           guests: totalGuests,
           total_price: totalPrice,
-          special_requests: values.specialRequests,
-          status: 'pending'
-        });
+          guest_name: `${values.firstName} ${values.lastName}`,
+          guest_email: values.email,
+          guest_phone: values.phone,
+          guest_id_number: values.idNumber,
+          special_requests: values.specialRequests || null,
+          status: 'pending',
+          payment_status: 'pending'
+        })
+        .select()
+        .single();
 
       if (error) throw error;
 
       toast({
         title: "Booking Request Submitted!",
-        description: "Your booking is pending admin approval. You'll be notified once it's confirmed.",
+        description: `Booking reference: ${bookingRef}. Your booking is pending admin approval.`,
       });
 
-      navigate("/bookings");
+      // Navigate to bookings page
+      setTimeout(() => {
+        navigate("/bookings");
+      }, 2000);
     } catch (error) {
       console.error("Booking error:", error);
       toast({

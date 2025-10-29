@@ -74,7 +74,7 @@ const AccommodationDetail = () => {
           {/* Booking Widget */}
           <div>
             <BookingWidget
-              accommodationId={accommodation.id}
+              roomId={accommodation.id}
               pricePerNight={accommodation.price_per_night || 0}
             />
           </div>

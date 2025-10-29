@@ -12,17 +12,17 @@ import { format, differenceInDays } from "date-fns";
 import { useRoomAvailability } from "@/hooks/useRoomAvailability";
 
 interface BookingWidgetProps {
-  accommodationId: string;
+  roomId: string;
   pricePerNight: number;
 }
 
-export const BookingWidget = ({ accommodationId, pricePerNight }: BookingWidgetProps) => {
+export const BookingWidget = ({ roomId, pricePerNight }: BookingWidgetProps) => {
   const navigate = useNavigate();
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [guests, setGuests] = useState({ adults: 2, children: 0 });
 
   const { data: availableRooms } = useRoomAvailability(
-    accommodationId,
+    roomId,
     dateRange?.from,
     dateRange?.to
   );
@@ -46,7 +46,7 @@ export const BookingWidget = ({ accommodationId, pricePerNight }: BookingWidgetP
     params.set("adults", guests.adults.toString());
     params.set("children", guests.children.toString());
     
-    navigate(`/booking/${accommodationId}?${params.toString()}`);
+    navigate(`/booking/${roomId}?${params.toString()}`);
   };
 
   const canReserve = dateRange?.from && dateRange?.to && nights > 0 && availableRooms && availableRooms > 0;
