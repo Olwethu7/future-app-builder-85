@@ -3,6 +3,8 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Users } from 'lucide-react';
 import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/layout/Layout";
+import { useQuery } from "@tanstack/react-query";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Room {
   id: string;
@@ -33,279 +35,34 @@ const Search: React.FC = () => {
     specialRequests: ''
   });
 
-  // Exact room inventory as specified
-  const rooms: Room[] = [
-    // Single Rooms
-    {
-      id: 'single-1',
-      name: 'Single Eco-Room',
-      type: 'single',
-      price: 750,
-      capacity: 1,
-      description: 'Cozy eco-friendly room for solo travelers with sustainable amenities',
-      amenities: ['Wi-Fi', 'En-suite Bathroom', 'Solar Power', 'Garden View'],
-      images: ['https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop'],
-      available: true
-    },
-    {
-      id: 'single-2',
-      name: 'Single Nature Room',
-      type: 'single',
-      price: 750,
-      capacity: 1,
-      description: 'Comfortable single room with views of the natural surroundings',
-      amenities: ['Wi-Fi', 'En-suite Bathroom', 'Solar Power', 'Nature View'],
-      images: ['https://images.unsplash.com/photo-1586375300773-8384e3e4916f?w=400&h=300&fit=crop'],
-      available: true
-    },
-    {
-      id: 'single-3',
-      name: 'Single Heritage Room',
-      type: 'single',
-      price: 750,
-      capacity: 1,
-      description: 'Traditional Zulu-inspired room for individual guests',
-      amenities: ['Wi-Fi', 'En-suite Bathroom', 'Traditional Decor', 'Courtyard View'],
-      images: ['https://images.unsplash.com/photo-1508873696983-2dfd5898f08b?w=400&h=300&fit=crop'],
-      available: true
-    },
-    {
-      id: 'single-4',
-      name: 'Single Mountain View',
-      type: 'single',
-      price: 750,
-      capacity: 1,
-      description: 'Single room with breathtaking mountain views',
-      amenities: ['Wi-Fi', 'En-suite Bathroom', 'Mountain View', 'Eco-Toiletries'],
-      images: ['https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop'],
-      available: true
-    },
-    {
-      id: 'single-5',
-      name: 'Single Dam View',
-      type: 'single',
-      price: 750,
-      capacity: 1,
-      description: 'Peaceful room overlooking Jozini Dam',
-      amenities: ['Wi-Fi', 'En-suite Bathroom', 'Dam View', 'Private Patio'],
-      images: ['https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop'],
-      available: true
-    },
-    // Double Rooms
-    {
-      id: 'double-1',
-      name: 'Double Eco-Room',
-      type: 'double',
-      price: 1200,
-      capacity: 2,
-      description: 'Spacious room for couples with sustainable features',
-      amenities: ['Wi-Fi', 'En-suite Bathroom', 'King Bed', 'Solar Power', 'Private Balcony'],
-      images: ['https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop'],
-      available: true
-    },
-    {
-      id: 'double-2',
-      name: 'Double Heritage Suite',
-      type: 'double',
-      price: 1200,
-      capacity: 2,
-      description: 'Traditional Zulu-style suite for couples',
-      amenities: ['Wi-Fi', 'En-suite Bathroom', 'Queen Bed', 'Traditional Art', 'Garden Access'],
-      images: ['https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=400&h=300&fit=crop'],
-      available: true
-    },
-    {
-      id: 'double-3',
-      name: 'Double Mountain Retreat',
-      type: 'double',
-      price: 1200,
-      capacity: 2,
-      description: 'Romantic room with panoramic mountain views',
-      amenities: ['Wi-Fi', 'En-suite Bathroom', 'Double Bed', 'Mountain View', 'Fireplace'],
-      images: ['https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&h=300&fit=crop'],
-      available: true
-    },
-    {
-      id: 'double-4',
-      name: 'Double Lake View',
-      type: 'double',
-      price: 1200,
-      capacity: 2,
-      description: 'Couples room with stunning dam views',
-      amenities: ['Wi-Fi', 'En-suite Bathroom', 'Double Bed', 'Lake View', 'Private Deck'],
-      images: ['https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=300&fit=crop'],
-      available: true
-    },
-    {
-      id: 'double-5',
-      name: 'Double Cultural Suite',
-      type: 'double',
-      price: 1200,
-      capacity: 2,
-      description: 'Authentic Zulu-inspired suite for two',
-      amenities: ['Wi-Fi', 'En-suite Bathroom', 'King Bed', 'Cultural Decor', 'Private Entrance'],
-      images: ['https://images.unsplash.com/photo-1555854876-bf3656d3b0e3?w=400&h=300&fit=crop'],
-      available: true
-    },
-    {
-      id: 'double-6',
-      name: 'Double Eco-Suite',
-      type: 'double',
-      price: 1200,
-      capacity: 2,
-      description: 'Modern eco-friendly suite for couples',
-      amenities: ['Wi-Fi', 'En-suite Bathroom', 'Queen Bed', 'Solar Power', 'Rain Shower'],
-      images: ['https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop'],
-      available: true
-    },
-    {
-      id: 'double-7',
-      name: 'Double Nature Lodge',
-      type: 'double',
-      price: 1200,
-      capacity: 2,
-      description: 'Secluded room surrounded by nature',
-      amenities: ['Wi-Fi', 'En-suite Bathroom', 'Double Bed', 'Forest View', 'Wildlife Sounds'],
-      images: ['https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=400&h=300&fit=crop'],
-      available: true
-    },
-    {
-      id: 'double-8',
-      name: 'Double Sunset View',
-      type: 'double',
-      price: 1200,
-      capacity: 2,
-      description: 'Perfect room for watching African sunsets',
-      amenities: ['Wi-Fi', 'En-suite Bathroom', 'King Bed', 'Sunset View', 'Romantic Setup'],
-      images: ['https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=400&h=300&fit=crop'],
-      available: true
-    },
-    // Family Rooms
-    {
-      id: 'family-1',
-      name: 'Family Eco-Suite',
-      type: 'family',
-      price: 2400,
-      capacity: 4,
-      description: 'Spacious family accommodation with multiple beds',
-      amenities: ['Wi-Fi', 'En-suite Bathroom', '2 Bedrooms', 'Living Area', 'Kitchenette', 'Garden Access'],
-      images: ['https://images.unsplash.com/photo-1539185441755-769473a23570?w=400&h=300&fit=crop'],
-      available: true
-    },
-    {
-      id: 'family-2',
-      name: 'Family Heritage House',
-      type: 'family',
-      price: 2400,
-      capacity: 4,
-      description: 'Traditional family unit with Zulu cultural elements',
-      amenities: ['Wi-Fi', '2 Bathrooms', '3 Beds', 'Living Room', 'Private Yard', 'Cultural Decor'],
-      images: ['https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=300&fit=crop'],
-      available: true
-    },
-    {
-      id: 'family-3',
-      name: 'Family Mountain Lodge',
-      type: 'family',
-      price: 2400,
-      capacity: 4,
-      description: 'Large family room with mountain views',
-      amenities: ['Wi-Fi', 'En-suite Bathroom', 'Family Beds', 'Living Space', 'Mountain View', 'Fireplace'],
-      images: ['https://images.unsplash.com/photo-1513584684374-8bab748fbf90?w=400&h=300&fit=crop'],
-      available: true
-    },
-    {
-      id: 'family-4',
-      name: 'Family Lake Retreat',
-      type: 'family',
-      price: 2400,
-      capacity: 4,
-      description: 'Perfect for families wanting dam access',
-      amenities: ['Wi-Fi', '2 Bathrooms', '4 Beds', 'Lake View', 'Private Deck', 'BBQ Area'],
-      images: ['https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop'],
-      available: true
-    },
-    {
-      id: 'family-5',
-      name: 'Family Cultural Suite',
-      type: 'family',
-      price: 2400,
-      capacity: 4,
-      description: 'Authentic Zulu family experience',
-      amenities: ['Wi-Fi', 'En-suite Bathroom', 'Family Beds', 'Traditional Art', 'Courtyard', 'Cultural Activities'],
-      images: ['https://images.unsplash.com/photo-1555854876-bf3656d3b0e3?w=400&h=300&fit=crop'],
-      available: true
-    },
-    {
-      id: 'family-6',
-      name: 'Family Nature House',
-      type: 'family',
-      price: 2400,
-      capacity: 4,
-      description: 'Eco-friendly family accommodation',
-      amenities: ['Wi-Fi', '2 Bathrooms', 'Multiple Beds', 'Garden Access', 'Solar Power', 'Recycling'],
-      images: ['https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop'],
-      available: true
-    },
-    {
-      id: 'family-7',
-      name: 'Family Adventure Base',
-      type: 'family',
-      price: 2400,
-      capacity: 4,
-      description: 'Ideal for active families',
-      amenities: ['Wi-Fi', 'En-suite Bathroom', 'Family Setup', 'Hiking Gear Storage', 'Activity Planning', 'Wildlife Guide'],
-      images: ['https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=300&fit=crop'],
-      available: true
-    },
-    {
-      id: 'family-8',
-      name: 'Family Eco-Retreat',
-      type: 'family',
-      price: 2400,
-      capacity: 4,
-      description: 'Sustainable family living',
-      amenities: ['Wi-Fi', '2 Bathrooms', '4 Beds', 'Composting', 'Rainwater', 'Organic Garden'],
-      images: ['https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=400&h=300&fit=crop'],
-      available: true
-    },
-    {
-      id: 'family-9',
-      name: 'Family Zulu Heritage',
-      type: 'family',
-      price: 2400,
-      capacity: 4,
-      description: 'Cultural immersion for families',
-      amenities: ['Wi-Fi', 'En-suite Bathroom', 'Traditional Beds', 'Cultural Artifacts', 'Storytelling Area', 'Craft Space'],
-      images: ['https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=400&h=300&fit=crop'],
-      available: true
-    },
-    {
-      id: 'family-10',
-      name: 'Family Premium Suite',
-      type: 'family',
-      price: 2400,
-      capacity: 4,
-      description: 'Luxury family accommodation',
-      amenities: ['Wi-Fi', '2 Bathrooms', 'Premium Beds', 'Living Room', 'Dining Area', 'Private Garden'],
-      images: ['https://images.unsplash.com/photo-1539185441755-769473a23570?w=400&h=300&fit=crop'],
-      available: true
-    },
-    // Event Space
-    {
-      id: 'event-1',
-      name: 'Book Hall or Space for Events',
-      type: 'event',
-      price: 2000,
-      capacity: 50,
-      description: 'Perfect for weddings, conferences, and special events',
-      amenities: ['Wi-Fi', 'Sound System', 'Projector', 'Catering Kitchen', 'Outdoor Area', 'Parking'],
-      images: ['https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=400&h=300&fit=crop'],
-      available: true
+  // Fetch rooms from database
+  const { data: rooms = [], isLoading } = useQuery({
+    queryKey: ['rooms'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('rooms')
+        .select('*')
+        .eq('available', true)
+        .order('room_type', { ascending: true });
+      
+      if (error) throw error;
+      
+      // Transform database format to component format
+      return (data || []).map(room => ({
+        id: room.id,
+        name: room.name,
+        type: room.room_type as 'single' | 'double' | 'family' | 'event',
+        price: Number(room.price_per_night),
+        capacity: room.capacity,
+        description: room.description || '',
+        amenities: room.amenities || [],
+        images: room.images || [],
+        available: room.available
+      }));
     }
-  ];
+  });
 
-  const [filteredRooms, setFilteredRooms] = useState<Room[]>(rooms);
+  const [filteredRooms, setFilteredRooms] = useState<Room[]>([]);
   const [roomTypeFilter, setRoomTypeFilter] = useState<'all' | 'single' | 'double' | 'family' | 'event'>('all');
 
   useEffect(() => {
@@ -314,7 +71,7 @@ const Search: React.FC = () => {
     } else {
       setFilteredRooms(rooms.filter(room => room.type === roomTypeFilter));
     }
-  }, [roomTypeFilter]);
+  }, [roomTypeFilter, rooms]);
 
   const handleBookNow = (room: Room) => {
     setSelectedRoom(room);
@@ -657,22 +414,35 @@ const Search: React.FC = () => {
 
         {/* Rooms Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredRooms.map((room) => (
-            <RoomCard key={room.id} room={room} />
-          ))}
+          {isLoading ? (
+            // Loading skeletons
+            Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="bg-card rounded-lg shadow-md overflow-hidden">
+                <Skeleton className="w-full h-48" />
+                <div className="p-4 space-y-3">
+                  <Skeleton className="h-6 w-3/4" />
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-10 w-full" />
+                </div>
+              </div>
+            ))
+          ) : filteredRooms.length === 0 ? (
+            <div className="col-span-full text-center py-12">
+              <div className="text-muted-foreground text-6xl mb-4">🏠</div>
+              <h3 className="text-xl font-semibold text-foreground mb-2">
+                No rooms found
+              </h3>
+              <p className="text-muted-foreground">
+                Try selecting a different room type
+              </p>
+            </div>
+          ) : (
+            filteredRooms.map((room) => (
+              <RoomCard key={room.id} room={room} />
+            ))
+          )}
         </div>
-
-        {filteredRooms.length === 0 && (
-          <div className="text-center py-12">
-            <div className="text-muted-foreground text-6xl mb-4">🏠</div>
-            <h3 className="text-xl font-semibold text-foreground mb-2">
-              No rooms found
-            </h3>
-            <p className="text-muted-foreground">
-              Try selecting a different room type
-            </p>
-          </div>
-        )}
 
         {/* Booking Modal */}
         {selectedRoom && (
