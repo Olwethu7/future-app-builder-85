@@ -68,12 +68,20 @@ export type Database = {
       bookings: {
         Row: {
           accommodation_id: string | null
+          admin_approved: boolean | null
+          admin_notes: string | null
           check_in_date: string | null
           check_out_date: string | null
           created_at: string | null
           experience_id: string | null
+          guest_email: string | null
+          guest_id_number: string | null
+          guest_name: string | null
+          guest_phone: string | null
           guests: number | null
           id: string
+          payment_proof_url: string | null
+          payment_status: string | null
           room_id: string | null
           special_requests: string | null
           status: Database["public"]["Enums"]["booking_status"] | null
@@ -83,12 +91,20 @@ export type Database = {
         }
         Insert: {
           accommodation_id?: string | null
+          admin_approved?: boolean | null
+          admin_notes?: string | null
           check_in_date?: string | null
           check_out_date?: string | null
           created_at?: string | null
           experience_id?: string | null
+          guest_email?: string | null
+          guest_id_number?: string | null
+          guest_name?: string | null
+          guest_phone?: string | null
           guests?: number | null
           id?: string
+          payment_proof_url?: string | null
+          payment_status?: string | null
           room_id?: string | null
           special_requests?: string | null
           status?: Database["public"]["Enums"]["booking_status"] | null
@@ -98,12 +114,20 @@ export type Database = {
         }
         Update: {
           accommodation_id?: string | null
+          admin_approved?: boolean | null
+          admin_notes?: string | null
           check_in_date?: string | null
           check_out_date?: string | null
           created_at?: string | null
           experience_id?: string | null
+          guest_email?: string | null
+          guest_id_number?: string | null
+          guest_name?: string | null
+          guest_phone?: string | null
           guests?: number | null
           id?: string
+          payment_proof_url?: string | null
+          payment_status?: string | null
           room_id?: string | null
           special_requests?: string | null
           status?: Database["public"]["Enums"]["booking_status"] | null

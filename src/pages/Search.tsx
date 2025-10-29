@@ -25,6 +25,13 @@ const Search: React.FC = () => {
     checkOut: '',
     guests: 1
   });
+  const [guestDetails, setGuestDetails] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    idNumber: '',
+    specialRequests: ''
+  });
 
   // Exact room inventory as specified
   const rooms: Room[] = [
@@ -319,8 +326,12 @@ const Search: React.FC = () => {
       return;
     }
 
+    if (!guestDetails.name || !guestDetails.email || !guestDetails.phone || !guestDetails.idNumber) {
+      alert('Please fill in all guest details');
+      return;
+    }
+
     try {
-      // Get current user
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
@@ -329,33 +340,38 @@ const Search: React.FC = () => {
         return;
       }
 
-      // Calculate total amount
       const checkIn = new Date(bookingDates.checkIn);
       const checkOut = new Date(bookingDates.checkOut);
       const nights = Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24));
       const totalAmount = selectedRoom.price * nights;
 
-      // Create booking object
       const bookingData = {
         user_id: user.id,
+        room_id: selectedRoom.id,
         check_in_date: bookingDates.checkIn,
         check_out_date: bookingDates.checkOut,
         guests: bookingDates.guests,
         total_price: totalAmount,
-        status: 'pending' as const
+        guest_name: guestDetails.name,
+        guest_email: guestDetails.email,
+        guest_phone: guestDetails.phone,
+        guest_id_number: guestDetails.idNumber,
+        special_requests: guestDetails.specialRequests || null,
+        status: 'pending' as const,
+        payment_status: 'pending',
+        admin_approved: false
       };
 
-      // Save to Supabase
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('bookings')
-        .insert([bookingData])
-        .select();
+        .insert([bookingData]);
 
       if (error) throw error;
 
-      alert('Booking confirmed successfully!');
+      alert('Booking request submitted! Awaiting admin approval.');
       setSelectedRoom(null);
       setBookingDates({ checkIn: '', checkOut: '', guests: 1 });
+      setGuestDetails({ name: '', email: '', phone: '', idNumber: '', specialRequests: '' });
       navigate('/bookings');
       
     } catch (error) {
@@ -420,7 +436,7 @@ const Search: React.FC = () => {
 
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-        <div className="bg-card rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
+        <div className="bg-card rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
           <div className="p-6">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold text-primary">Book {room.name}</h2>
@@ -429,33 +445,38 @@ const Search: React.FC = () => {
               </button>
             </div>
 
-            <img src={room.images[0]} alt={room.name} className="w-full h-48 object-cover rounded-lg mb-4" />
+            <img src={room.images[0]} alt={room.name} className="w-full h-48 object-cover rounded-lg mb-6" />
 
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-1">Check-in Date</label>
-                <input
-                  type="date"
-                  value={bookingDates.checkIn}
-                  onChange={(e) => setBookingDates({...bookingDates, checkIn: e.target.value})}
-                  className="w-full p-2 border border-border rounded-lg bg-background text-foreground"
-                  min={new Date().toISOString().split('T')[0]}
-                />
+              {/* Booking Dates */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-1">Check-in Date *</label>
+                  <input
+                    type="date"
+                    value={bookingDates.checkIn}
+                    onChange={(e) => setBookingDates({...bookingDates, checkIn: e.target.value})}
+                    className="w-full p-2 border border-border rounded-lg bg-background text-foreground"
+                    min={new Date().toISOString().split('T')[0]}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-1">Check-out Date *</label>
+                  <input
+                    type="date"
+                    value={bookingDates.checkOut}
+                    onChange={(e) => setBookingDates({...bookingDates, checkOut: e.target.value})}
+                    className="w-full p-2 border border-border rounded-lg bg-background text-foreground"
+                    min={bookingDates.checkIn || new Date().toISOString().split('T')[0]}
+                    required
+                  />
+                </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-foreground mb-1">Check-out Date</label>
-                <input
-                  type="date"
-                  value={bookingDates.checkOut}
-                  onChange={(e) => setBookingDates({...bookingDates, checkOut: e.target.value})}
-                  className="w-full p-2 border border-border rounded-lg bg-background text-foreground"
-                  min={bookingDates.checkIn || new Date().toISOString().split('T')[0]}
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-1">Number of Guests</label>
+                <label className="block text-sm font-medium text-foreground mb-1">Number of Guests *</label>
                 <select
                   value={bookingDates.guests}
                   onChange={(e) => setBookingDates({...bookingDates, guests: parseInt(e.target.value)})}
@@ -467,25 +488,95 @@ const Search: React.FC = () => {
                 </select>
               </div>
 
+              {/* Guest Details */}
+              <div className="border-t pt-4 mt-4">
+                <h3 className="font-semibold text-foreground mb-3">Guest Information</h3>
+                
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-1">Full Name *</label>
+                    <input
+                      type="text"
+                      value={guestDetails.name}
+                      onChange={(e) => setGuestDetails({...guestDetails, name: e.target.value})}
+                      className="w-full p-2 border border-border rounded-lg bg-background text-foreground"
+                      placeholder="John Doe"
+                      required
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-1">Email Address *</label>
+                      <input
+                        type="email"
+                        value={guestDetails.email}
+                        onChange={(e) => setGuestDetails({...guestDetails, email: e.target.value})}
+                        className="w-full p-2 border border-border rounded-lg bg-background text-foreground"
+                        placeholder="john@example.com"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-1">Phone Number *</label>
+                      <input
+                        type="tel"
+                        value={guestDetails.phone}
+                        onChange={(e) => setGuestDetails({...guestDetails, phone: e.target.value})}
+                        className="w-full p-2 border border-border rounded-lg bg-background text-foreground"
+                        placeholder="+27 123 456 789"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-1">ID/Passport Number *</label>
+                    <input
+                      type="text"
+                      value={guestDetails.idNumber}
+                      onChange={(e) => setGuestDetails({...guestDetails, idNumber: e.target.value})}
+                      className="w-full p-2 border border-border rounded-lg bg-background text-foreground"
+                      placeholder="ID or Passport Number"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-1">Special Requests (Optional)</label>
+                    <textarea
+                      value={guestDetails.specialRequests}
+                      onChange={(e) => setGuestDetails({...guestDetails, specialRequests: e.target.value})}
+                      className="w-full p-2 border border-border rounded-lg bg-background text-foreground"
+                      rows={3}
+                      placeholder="Any dietary restrictions, accessibility needs, or special occasions..."
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Price Summary */}
               {calculateTotal() > 0 && (
-                <div className="bg-muted p-3 rounded-lg">
-                  <div className="flex justify-between text-sm">
+                <div className="bg-muted p-4 rounded-lg border-t mt-4">
+                  <div className="flex justify-between text-sm mb-2">
                     <span>Room rate:</span>
                     <span>R{room.price} × {Math.ceil((new Date(bookingDates.checkOut).getTime() - new Date(bookingDates.checkIn).getTime()) / (1000 * 60 * 60 * 24))} nights</span>
                   </div>
-                  <div className="flex justify-between font-bold text-lg mt-2">
+                  <div className="flex justify-between font-bold text-lg">
                     <span>Total:</span>
                     <span>R{calculateTotal()}</span>
                   </div>
+                  <p className="text-xs text-muted-foreground mt-2">Payment link will be sent after admin approval</p>
                 </div>
               )}
 
               <button
                 onClick={handleConfirmBooking}
-                disabled={!bookingDates.checkIn || !bookingDates.checkOut}
-                className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors disabled:bg-muted disabled:cursor-not-allowed"
+                disabled={!bookingDates.checkIn || !bookingDates.checkOut || !guestDetails.name || !guestDetails.email || !guestDetails.phone || !guestDetails.idNumber}
+                className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed"
               >
-                Confirm Booking
+                Submit Booking Request
               </button>
             </div>
           </div>

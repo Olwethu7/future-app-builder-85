@@ -22,8 +22,11 @@ const AccommodationDetail = lazy(() => import("./pages/AccommodationDetail"));
 const Booking = lazy(() => import("./pages/Booking"));
 const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
 const AdminBookings = lazy(() => import("./pages/admin/AdminBookings"));
+const AdminBookingManagement = lazy(() => import("./pages/admin/AdminBookingManagement"));
 const AdminRooms = lazy(() => import("./pages/admin/AdminRooms"));
 const AdminContent = lazy(() => import("./pages/admin/AdminContent"));
+const Payment = lazy(() => import("./pages/Payment"));
+const PaymentProof = lazy(() => import("./pages/PaymentProof"));
 const AboutUs = lazy(() => import("./pages/AboutUs"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Sustainability = lazy(() => import("./pages/Sustainability"));
@@ -114,6 +117,14 @@ const App = () => (
               }
             />
             <Route
+              path="/admin/booking-management"
+              element={
+                <ProtectedRoute requireAdmin>
+                  <AdminBookingManagement />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/admin/rooms"
               element={
                 <ProtectedRoute requireAdmin>
@@ -129,6 +140,8 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+            <Route path="/payment/:bookingId" element={<Payment />} />
+            <Route path="/payment-proof/:bookingId" element={<PaymentProof />} />
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

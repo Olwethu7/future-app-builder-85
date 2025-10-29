@@ -19,14 +19,10 @@ export const AdminSidebar = () => {
 
   const menuItems = [
     { icon: LayoutDashboard, label: "Dashboard", path: "/admin" },
-    { icon: Calendar, label: "Bookings", path: "/admin/bookings" },
-    { icon: Users, label: "Guests", path: "/admin/guests" },
+    { icon: Calendar, label: "Bookings Table", path: "/admin/bookings" },
+    { icon: Calendar, label: "Booking Management", path: "/admin/booking-management" },
     { icon: BedDouble, label: "Rooms", path: "/admin/rooms" },
-    { icon: Compass, label: "Experiences", path: "/admin/experiences" },
-    { icon: UserCog, label: "Staff", path: "/admin/staff" },
-    { icon: BarChart3, label: "Reports", path: "/admin/reports" },
     { icon: FileText, label: "Content", path: "/admin/content" },
-    { icon: Settings, label: "Settings", path: "/admin/settings" },
   ];
 
   return (
