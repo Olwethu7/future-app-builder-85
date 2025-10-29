@@ -16,6 +16,7 @@ const Search = lazy(() => import("./pages/Search"));
 const Experiences = lazy(() => import("./pages/Experiences"));
 const Bookings = lazy(() => import("./pages/Bookings"));
 const Profile = lazy(() => import("./pages/Profile"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 const AccommodationDetail = lazy(() => import("./pages/AccommodationDetail"));
@@ -83,6 +84,14 @@ const App = () => (
             
             {/* Protected Routes */}
             <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/bookings"
               element={
                 <ProtectedRoute>
@@ -100,6 +109,14 @@ const App = () => (
             />
             
             {/* Admin Routes */}
+            <Route
+              path="/admin/dashboard"
+              element={
+                <ProtectedRoute requireAdmin>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/admin"
               element={

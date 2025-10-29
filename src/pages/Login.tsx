@@ -33,7 +33,7 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 
 const Login = () => {
   const navigate = useNavigate();
-  const { signIn, signUp, user } = useAuth();
+  const { signIn, signUp, user, isAdmin, isLoading } = useAuth();
   const { toast } = useToast();
 
   const loginForm = useForm<LoginFormValues>({
@@ -45,10 +45,14 @@ const Login = () => {
   });
 
   useEffect(() => {
-    if (user) {
-      navigate("/", { replace: true });
+    if (user && !isLoading) {
+      if (isAdmin) {
+        navigate("/admin/dashboard", { replace: true });
+      } else {
+        navigate("/dashboard", { replace: true });
+      }
     }
-  }, [user, navigate]);
+  }, [user, isAdmin, isLoading, navigate]);
 
   const onLogin = async (values: LoginFormValues) => {
     const { error } = await signIn(values.email, values.password);
@@ -64,7 +68,7 @@ const Login = () => {
         title: "Welcome back!",
         description: "You've successfully logged in.",
       });
-      navigate("/");
+      // Navigation will be handled by useEffect based on role
     }
   };
 

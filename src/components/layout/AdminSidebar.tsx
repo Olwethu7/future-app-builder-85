@@ -1,7 +1,8 @@
 import { 
   Calendar,
   LogOut,
-  User
+  User,
+  LayoutDashboard
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -20,6 +21,7 @@ export const AdminSidebar = () => {
   };
 
   const menuItems = [
+    { icon: LayoutDashboard, label: "Dashboard", path: "/admin/dashboard" },
     { icon: Calendar, label: "Booking Management", path: "/admin/booking-management" },
   ];
 
