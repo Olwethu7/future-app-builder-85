@@ -45,12 +45,11 @@ const Search: React.FC = () => {
     name: '',
     email: '',
     phone: '',
-    idNumber: '',
     specialRequests: ''
   });
 
   // Fetch rooms from database
-  const { data: rooms = [], isLoading } = useQuery({
+  const { data: rooms = [], isLoading, refetch } = useQuery({
     queryKey: ['rooms'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -76,6 +75,28 @@ const Search: React.FC = () => {
       }));
     }
   });
+
+  // Real-time subscription for room updates
+  useEffect(() => {
+    const channel = supabase
+      .channel('rooms-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'rooms'
+        },
+        () => {
+          refetch();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [refetch]);
 
   // Group rooms by type
   const roomGroups: RoomGroup[] = React.useMemo(() => {
@@ -155,7 +176,6 @@ const Search: React.FC = () => {
         guest_name: guestDetails.name,
         guest_email: guestDetails.email,
         guest_phone: guestDetails.phone,
-        guest_id_number: guestDetails.idNumber || null,
         special_requests: guestDetails.specialRequests || null,
         status: 'pending' as const,
         payment_status: 'pending',
@@ -171,7 +191,7 @@ const Search: React.FC = () => {
       alert('Booking request submitted! Awaiting admin approval.');
       setSelectedRoom(null);
       setBookingDates({ checkIn: '', checkOut: '', guests: 1 });
-      setGuestDetails({ name: '', email: '', phone: '', idNumber: '', specialRequests: '' });
+      setGuestDetails({ name: '', email: '', phone: '', specialRequests: '' });
       navigate('/bookings');
       
     } catch (error) {
@@ -336,17 +356,6 @@ const Search: React.FC = () => {
                         required
                       />
                     </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-1">ID/Passport Number (Optional)</label>
-                    <input
-                      type="text"
-                      value={guestDetails.idNumber}
-                      onChange={(e) => setGuestDetails({...guestDetails, idNumber: e.target.value})}
-                      className="w-full p-2 border border-border rounded-lg bg-background text-foreground"
-                      placeholder="ID or Passport Number"
-                    />
                   </div>
 
                   <div>

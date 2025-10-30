@@ -9,7 +9,7 @@ interface AuthContextType {
   session: Session | null;
   userRole: UserRole;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
-  signUp: (email: string, password: string, fullName: string) => Promise<{ error: any }>;
+  signUp: (email: string, password: string, fullName: string, role?: 'admin' | 'user') => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   isLoading: boolean;
   isAdmin: boolean;
@@ -86,10 +86,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return { error };
   };
 
-  const signUp = async (email: string, password: string, fullName: string) => {
+  const signUp = async (email: string, password: string, fullName: string, role: 'admin' | 'user' = 'user') => {
     const redirectUrl = `${window.location.origin}/`;
     
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -99,6 +99,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         },
       },
     });
+
+    // If signup successful and user is created, insert the role
+    if (!error && data.user) {
+      // The role will be automatically inserted via the handle_new_user trigger
+      // But we can update it if the user selected admin during registration
+      if (role === 'admin') {
+        await supabase
+          .from('user_roles')
+          .update({ role: 'admin' })
+          .eq('user_id', data.user.id);
+      }
+    }
+    
     return { error };
   };
 

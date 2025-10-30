@@ -22,8 +22,7 @@ const bookingSchema = z.object({
   firstName: z.string().min(1, "First name is required").max(50),
   lastName: z.string().min(1, "Last name is required").max(50),
   email: z.string().email("Invalid email address"),
-  phone: z.string().min(10, "Phone number must be at least 10 digits"),
-  idNumber: z.string().max(20).optional(),
+  phone: z.string().min(1, "Phone number is required"),
   specialRequests: z.string().max(500).optional(),
 });
 
@@ -50,7 +49,6 @@ const Booking = () => {
       lastName: "",
       email: user?.email || "",
       phone: "",
-      idNumber: "",
       specialRequests: "",
     },
   });
@@ -148,7 +146,6 @@ const Booking = () => {
           guest_name: `${values.firstName} ${values.lastName}`,
           guest_email: values.email,
           guest_phone: values.phone,
-          guest_id_number: values.idNumber,
           special_requests: values.specialRequests || null,
           status: 'pending',
           payment_status: 'pending'

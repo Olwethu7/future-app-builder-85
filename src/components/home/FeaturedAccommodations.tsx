@@ -34,7 +34,7 @@ export const FeaturedAccommodations = () => {
   const navigate = useNavigate();
 
   // Fetch rooms from database
-  const { data: rooms = [], isLoading } = useQuery({
+  const { data: rooms = [], isLoading, refetch } = useQuery({
     queryKey: ['featured-rooms'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -60,6 +60,28 @@ export const FeaturedAccommodations = () => {
       }));
     }
   });
+
+  // Real-time subscription for room updates
+  React.useEffect(() => {
+    const channel = supabase
+      .channel('featured-rooms-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'rooms'
+        },
+        () => {
+          refetch();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [refetch]);
 
   // Group rooms by type
   const roomGroups: RoomGroup[] = React.useMemo(() => {
