@@ -1,3 +1,8 @@
+import singleRoom from "@/assets/rooms/single.jpg";
+import doubleRoom from "@/assets/rooms/double.jpg";
+import familyRoom from "@/assets/rooms/family.jpg";
+import eventHall from "@/assets/rooms/event.jpg";
+
 export interface RoomType {
   id: string;
   name: string;
@@ -19,10 +24,7 @@ export const roomTypes: RoomType[] = [
     type: "Single",
     price_per_night: 750,
     capacity: 1,
-    images: [
-      "https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=2070",
-      "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?q=80&w=2071"
-    ],
+    images: [singleRoom],
     amenities: ["Wi-Fi", "Fireplace", "Eco-Friendly Toiletries", "Hiking Trails Access"],
     available: true,
     quantity: 5
@@ -34,10 +36,7 @@ export const roomTypes: RoomType[] = [
     type: "Double",
     price_per_night: 1200,
     capacity: 2,
-    images: [
-      "https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=2074",
-      "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=2070"
-    ],
+    images: [doubleRoom],
     amenities: ["Wi-Fi", "Swimming Pool", "Restaurant", "Spa", "Wildlife Tours"],
     available: true,
     quantity: 8
@@ -49,10 +48,7 @@ export const roomTypes: RoomType[] = [
     type: "Family",
     price_per_night: 2400,
     capacity: 4,
-    images: [
-      "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=2070",
-      "https://images.unsplash.com/photo-1615460549969-36fa19521a4f?q=80&w=2074"
-    ],
+    images: [familyRoom],
     amenities: ["Wi-Fi", "Swimming Pool", "Restaurant", "Spa", "Hiking Trails", "Wildlife Tours", "Cultural Activities"],
     available: true,
     quantity: 10
@@ -64,10 +60,7 @@ export const roomTypes: RoomType[] = [
     type: "Event Space",
     price_per_night: 2000,
     capacity: 100,
-    images: [
-      "https://images.unsplash.com/photo-1519167758481-83f29da8c2e1?q=80&w=2096",
-      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2070"
-    ],
+    images: [eventHall],
     amenities: ["Wi-Fi", "Restaurant", "Solar Power", "Audio/Visual Equipment", "Outdoor Space", "Catering Available"],
     available: true,
     quantity: 1
