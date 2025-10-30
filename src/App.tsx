@@ -34,6 +34,7 @@ const CulturalHeritage = lazy(() => import("./pages/CulturalHeritage"));
 const Settings = lazy(() => import("./pages/Settings"));
 const Help = lazy(() => import("./pages/Help"));
 const LocalArea = lazy(() => import("./pages/LocalArea"));
+const Gallery = lazy(() => import("./pages/Gallery"));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -86,6 +87,7 @@ const App = () => {
             <Route path="/settings" element={<Settings />} />
             <Route path="/help" element={<Help />} />
             <Route path="/local-area" element={<LocalArea />} />
+            <Route path="/gallery" element={<Gallery />} />
             
             {/* Protected Routes */}
             <Route

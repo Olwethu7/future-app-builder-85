@@ -1,4 +1,4 @@
-import { X, Info, Map, Leaf, Heart, Mail, Settings, HelpCircle } from "lucide-react";
+import { X, Info, Map, Leaf, Heart, Mail, Settings, HelpCircle, Image } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +19,7 @@ export const HamburgerMenu = ({ open, onClose }: HamburgerMenuProps) => {
   const menuItems = [
     { icon: Info, label: "About Us", path: "/about" },
     { icon: Map, label: "Local Area", path: "/local-area" },
+    { icon: Image, label: "Gallery", path: "/gallery" },
     { icon: Leaf, label: "Sustainability", path: "/sustainability" },
     { icon: Heart, label: "Cultural Heritage", path: "/cultural-heritage" },
     { icon: Mail, label: "Contact", path: "/contact" },

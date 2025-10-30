@@ -2,6 +2,7 @@ import { Menu, LogOut, User as UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate, Link } from "react-router-dom";
+import logo from "@/assets/logo.jpg";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -36,9 +37,12 @@ export const Header = ({ onMenuToggle }: HeaderProps) => {
           >
             <Menu className="h-5 w-5" />
           </Button>
-          <h1 className="font-montserrat text-xl font-bold text-primary md:text-2xl cursor-pointer" onClick={() => navigate("/")}>
-            Zulu Lami
-          </h1>
+          <img 
+            src={logo} 
+            alt="Zulu Lami Eco-Resort" 
+            className="h-12 w-auto cursor-pointer" 
+            onClick={() => navigate("/")}
+          />
         </div>
         
         <nav className="hidden md:flex items-center gap-6">
@@ -50,6 +54,9 @@ export const Header = ({ onMenuToggle }: HeaderProps) => {
           </Link>
           <Link to="/experiences" className="text-sm font-medium transition-colors hover:text-primary">
             Experiences
+          </Link>
+          <Link to="/gallery" className="text-sm font-medium transition-colors hover:text-primary">
+            Gallery
           </Link>
           {user ? (
             <DropdownMenu>
