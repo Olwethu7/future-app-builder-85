@@ -170,12 +170,12 @@ const Experiences = () => {
           onValueChange={setSelectedTab}
           className="w-full"
         >
-          <TabsList className="grid w-full grid-cols-2 mb-8">
-            <TabsTrigger value="activities" className="text-lg py-3">
-              Activities ({filteredActivities.length})
+          <TabsList className="grid w-full grid-cols-2 mb-8 h-auto">
+            <TabsTrigger value="activities" className="text-lg py-4 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              Activities
             </TabsTrigger>
-            <TabsTrigger value="food" className="text-lg py-3">
-              Food & Dining ({filteredFood.length})
+            <TabsTrigger value="food" className="text-lg py-4 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              Food & Dining
             </TabsTrigger>
           </TabsList>
 

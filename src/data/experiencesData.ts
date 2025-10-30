@@ -15,44 +15,6 @@ export interface ExperienceItem {
 export const activitiesData: ExperienceItem[] = [
   // Cultural Experiences
   {
-    id: "cultural-1",
-    title: "Traditional Zulu Dance Performances",
-    price: 250,
-    duration: "1.5 hours",
-    maxParticipants: 50,
-    location: "Cultural Village",
-    description: "Experience the vibrant energy of traditional Zulu dance performances featuring authentic costumes, rhythmic drumming, and powerful storytelling through movement.",
-    included: [
-      "Professional Zulu dance troupe performance",
-      "Traditional music and drumming",
-      "Cultural explanation and history",
-      "Photo opportunities with performers",
-      "Light refreshments"
-    ],
-    image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80",
-    category: "activities",
-    subcategory: "Cultural Experiences"
-  },
-  {
-    id: "cultural-2",
-    title: "Zulu Beadwork Workshop",
-    price: 180,
-    duration: "2 hours",
-    maxParticipants: 15,
-    location: "Artisan Studio",
-    description: "Learn the ancient art of Zulu beadwork from local artisans. Create your own traditional beaded bracelet while understanding the cultural significance of colors and patterns.",
-    included: [
-      "Expert instruction from local artisans",
-      "All materials and tools provided",
-      "Take home your handmade beadwork",
-      "Cultural history lesson",
-      "Certificate of participation"
-    ],
-    image: "https://images.unsplash.com/photo-1611344518340-fe1e4e8e7638?w=800&q=80",
-    category: "activities",
-    subcategory: "Cultural Experiences"
-  },
-  {
     id: "cultural-3",
     title: "Cultural Village Tour",
     price: 200,
@@ -68,25 +30,6 @@ export const activitiesData: ExperienceItem[] = [
       "Souvenir gift"
     ],
     image: "https://images.unsplash.com/photo-1523805009345-7448845a9e53?w=800&q=80",
-    category: "activities",
-    subcategory: "Cultural Experiences"
-  },
-  {
-    id: "cultural-4",
-    title: "Traditional Zulu Cooking Class",
-    price: 220,
-    duration: "3 hours",
-    maxParticipants: 12,
-    location: "Resort Kitchen",
-    description: "Learn to prepare authentic Zulu dishes using traditional methods and local ingredients. Enjoy the fruits of your labor in a communal dining experience.",
-    included: [
-      "Hands-on cooking instruction",
-      "All ingredients and equipment",
-      "Recipe booklet to take home",
-      "Full meal prepared and enjoyed together",
-      "Traditional cooking utensils demonstration"
-    ],
-    image: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800&q=80",
     category: "activities",
     subcategory: "Cultural Experiences"
   },
@@ -112,12 +55,12 @@ export const activitiesData: ExperienceItem[] = [
   },
   {
     id: "nature-2",
-    title: "Tiger Fishing",
+    title: "Tiger Fishing - Coming Soon",
     price: 450,
     duration: "5 hours",
     maxParticipants: 4,
     location: "Jozini Dam",
-    description: "Test your skills against the legendary tiger fish in the pristine waters of Jozini Dam. An angler's dream adventure with expert guides.",
+    description: "Coming Soon! Test your skills against the legendary tiger fish in the pristine waters of Jozini Dam. An angler's dream adventure with expert guides.",
     included: [
       "Experienced fishing guide",
       "All fishing equipment",
@@ -131,12 +74,12 @@ export const activitiesData: ExperienceItem[] = [
   },
   {
     id: "nature-3",
-    title: "Nature Hiking Trails",
+    title: "Nature Hiking Trails - Coming Soon",
     price: 180,
     duration: "3 hours",
     maxParticipants: 15,
     location: "Resort Trails",
-    description: "Explore the breathtaking natural beauty of KwaZulu-Natal on guided hiking trails. Discover local flora, fauna, and stunning viewpoints.",
+    description: "Coming Soon! Explore the breathtaking natural beauty of KwaZulu-Natal on guided hiking trails. Discover local flora, fauna, and stunning viewpoints.",
     included: [
       "Expert trail guide",
       "Trail map and information",

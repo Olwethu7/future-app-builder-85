@@ -9,6 +9,16 @@ import gallery5 from "@/assets/gallery/gallery-5.jpg";
 import gallery6 from "@/assets/gallery/gallery-6.jpg";
 import gallery7 from "@/assets/gallery/gallery-7.jpg";
 import gallery8 from "@/assets/gallery/gallery-8.jpg";
+import gallery9 from "@/assets/gallery/gallery-9.jpg";
+import gallery10 from "@/assets/gallery/gallery-10.jpg";
+import gallery11 from "@/assets/gallery/gallery-11.jpg";
+import gallery12 from "@/assets/gallery/gallery-12.jpg";
+import gallery13 from "@/assets/gallery/gallery-13.jpg";
+import gallery14 from "@/assets/gallery/gallery-14.jpg";
+import gallery15 from "@/assets/gallery/gallery-15.jpg";
+import gallery16 from "@/assets/gallery/gallery-16.jpg";
+import gallery17 from "@/assets/gallery/gallery-17.jpg";
+import gallery18 from "@/assets/gallery/gallery-18.jpg";
 
 const galleryImages = [
   { src: gallery1, alt: "Zulu Lami Resort Exterior" },
@@ -19,6 +29,16 @@ const galleryImages = [
   { src: gallery6, alt: "Outdoor Restaurant Area" },
   { src: gallery7, alt: "Outdoor Kitchen" },
   { src: gallery8, alt: "Garden Landscaping" },
+  { src: gallery9, alt: "Bar Setup" },
+  { src: gallery10, alt: "Restaurant View" },
+  { src: gallery11, alt: "Breakfast Plate" },
+  { src: gallery12, alt: "Braai Platter" },
+  { src: gallery13, alt: "Conference Room" },
+  { src: gallery14, alt: "Meeting Room" },
+  { src: gallery15, alt: "Zebra Wildlife" },
+  { src: gallery16, alt: "Kayaking Activities" },
+  { src: gallery17, alt: "Birds" },
+  { src: gallery18, alt: "Swimming Pool" },
 ];
 
 const Gallery = () => {
