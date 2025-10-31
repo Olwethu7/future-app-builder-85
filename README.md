@@ -1,73 +1,19 @@
-# Welcome to your Lovable project
-
-## Project info
-
-**URL**: https://lovable.dev/projects/b2b3f49b-779f-4fbb-9426-a57826649742
-
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/b2b3f49b-779f-4fbb-9426-a57826649742) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/b2b3f49b-779f-4fbb-9426-a57826649742) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Project Overview
+This project represents a modern web application built with a focus on performance, scalability, and user-friendly design. It uses up-to-date web technologies and follows best practices to ensure smooth development and easy maintenance.
+How to Edit or Contribute
+You can manage and update the project using your preferred development tools. Developers can either work locally on their computers or make edits directly through GitHub. The project is set up for flexibility, allowing easy collaboration, version control, and updates.
+If you prefer a cloud-based editing experience, GitHub Codespaces offers an alternative for working on the project without any local setup.
+Technologies Used
+The application is developed using modern frameworks and tools, including:
+Vite for fast development and optimized builds
+React for creating dynamic user interfaces
+TypeScript for structured and type-safe coding
+Tailwind CSS for efficient styling
+shadcn-ui for clean and reusable components
+These technologies work together to create a responsive, visually appealing, and high-performing web application.
+Deployment
+The project can be deployed through any popular web hosting service, such as Vercel, Netlify, or GitHub Pages. The deployment process is straightforward and can be integrated into your workflow for quick publishing and updates.
+Custom Domain
+A custom domain can be connected once the application is deployed. This helps create a professional online presence and improves brand identity. Domain connection steps depend on the chosen hosting provider but are usually simple and well-documented.
+Conclusion
+This project is designed to be modern, lightweight, and easy to manage. Whether you're updating features, improving design, or preparing for deployment, the setup ensures a smooth and efficient workflow throughout the development process.
