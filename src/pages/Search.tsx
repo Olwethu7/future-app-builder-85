@@ -161,14 +161,42 @@ const Search: React.FC = () => {
         return;
       }
 
+      // Fetch accommodation_id from the room
+      const { data: roomData, error: roomError } = await supabase
+        .from('rooms')
+        .select('accommodation_id')
+        .eq('id', selectedRoom.id)
+        .single();
+
+      if (roomError) {
+        console.error('Room lookup error:', roomError);
+        alert(`Failed to fetch room details: ${roomError.message}`);
+        return;
+      }
+
       const checkIn = new Date(bookingDates.checkIn);
       const checkOut = new Date(bookingDates.checkOut);
       const nights = Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24));
       const totalAmount = selectedRoom.price * nights;
 
+      console.log('Creating booking with data:', {
+        user_id: user.id,
+        room_id: selectedRoom.id,
+        accommodation_id: roomData?.accommodation_id,
+        check_in_date: bookingDates.checkIn,
+        check_out_date: bookingDates.checkOut,
+        guests: bookingDates.guests,
+        total_price: totalAmount,
+        guest_name: guestDetails.name,
+        guest_email: guestDetails.email,
+        guest_phone: guestDetails.phone,
+        status: 'pending'
+      });
+
       const bookingData = {
         user_id: user.id,
         room_id: selectedRoom.id,
+        accommodation_id: roomData?.accommodation_id || null,
         check_in_date: bookingDates.checkIn,
         check_out_date: bookingDates.checkOut,
         guests: bookingDates.guests,
@@ -177,17 +205,27 @@ const Search: React.FC = () => {
         guest_email: guestDetails.email,
         guest_phone: guestDetails.phone,
         special_requests: guestDetails.specialRequests || null,
-        status: 'confirmed' as const,
+        status: 'pending' as const,
         payment_status: 'pending'
       };
 
-      const { error } = await supabase
+      const { data: bookingResult, error } = await supabase
         .from('bookings')
-        .insert([bookingData]);
+        .insert([bookingData])
+        .select()
+        .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Booking insertion error:', error);
+        console.error('Error details:', JSON.stringify(error, null, 2));
+        console.error('Attempted booking data:', bookingData);
+        alert(`Booking failed: ${error.message}\n\nPlease check console for details or contact support.`);
+        return;
+      }
 
-      alert('Booking confirmed! A notification has been sent to the resort. You will receive payment details via email shortly.');
+      console.log('✅ Booking created successfully:', bookingResult);
+      
+      alert('✅ Booking submitted successfully!\n\nA notification has been sent to developmentteam86@gmail.com with all your booking details.\n\nYou will receive payment details via email shortly.');
       setSelectedRoom(null);
       setBookingDates({ checkIn: '', checkOut: '', guests: 1 });
       setGuestDetails({ name: '', email: '', phone: '', specialRequests: '' });
@@ -195,7 +233,8 @@ const Search: React.FC = () => {
       
     } catch (error) {
       console.error('Booking error:', error);
-      alert('Booking failed. Please try again.');
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      alert(`Booking failed: ${errorMessage}. Please try again.`);
     }
   };
 
@@ -319,7 +358,10 @@ const Search: React.FC = () => {
                     <input
                       type="text"
                       value={guestDetails.name}
-                      onChange={(e) => setGuestDetails({...guestDetails, name: e.target.value})}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        setGuestDetails(prev => ({...prev, name: value}));
+                      }}
                       className="w-full p-2 border border-border rounded-lg bg-background text-foreground"
                       placeholder="John Doe"
                       required
@@ -332,7 +374,10 @@ const Search: React.FC = () => {
                       <input
                         type="email"
                         value={guestDetails.email}
-                        onChange={(e) => setGuestDetails({...guestDetails, email: e.target.value})}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setGuestDetails(prev => ({...prev, email: value}));
+                        }}
                         className="w-full p-2 border border-border rounded-lg bg-background text-foreground"
                         placeholder="john@example.com"
                         required
@@ -344,7 +389,10 @@ const Search: React.FC = () => {
                       <input
                         type="tel"
                         value={guestDetails.phone}
-                        onChange={(e) => setGuestDetails({...guestDetails, phone: e.target.value})}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setGuestDetails(prev => ({...prev, phone: value}));
+                        }}
                         className="w-full p-2 border border-border rounded-lg bg-background text-foreground"
                         placeholder="+27 123 456 789"
                         required
@@ -356,7 +404,10 @@ const Search: React.FC = () => {
                     <label className="block text-sm font-medium text-foreground mb-1">Special Requests (Optional)</label>
                     <textarea
                       value={guestDetails.specialRequests}
-                      onChange={(e) => setGuestDetails({...guestDetails, specialRequests: e.target.value})}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        setGuestDetails(prev => ({...prev, specialRequests: value}));
+                      }}
                       className="w-full p-2 border border-border rounded-lg bg-background text-foreground"
                       rows={3}
                       placeholder="Any dietary restrictions, accessibility needs, or special occasions..."
