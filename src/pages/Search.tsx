@@ -471,12 +471,23 @@ const Search: React.FC = () => {
           )}
         </div>
 
-        <button
-          onClick={() => handleBookNow(group)}
-          className="w-full bg-secondary text-secondary-foreground py-2 rounded-lg font-semibold hover:bg-secondary/90 transition-colors"
-        >
-          Book Now
-        </button>
+        <div className="space-y-2">
+          <button
+            onClick={() => handleBookNow(group)}
+            className="w-full bg-secondary text-secondary-foreground py-2 rounded-lg font-semibold hover:bg-secondary/90 transition-colors"
+          >
+            Book Now
+          </button>
+          
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLSengxLaLm0Tam9V6dzghnqRpsgvOZ4iiFUgPxfZeKXr159XGw/viewform?usp=dialog"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full bg-primary text-primary-foreground py-2 rounded-lg font-semibold hover:bg-primary/90 transition-colors text-center"
+          >
+            Book using Google Forms
+          </a>
+        </div>
       </div>
     </div>
   );
