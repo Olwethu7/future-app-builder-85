@@ -31,7 +31,7 @@ export const GuestInfoForm = ({ form }: GuestInfoFormProps) => {
               <FormItem>
                 <FormLabel>First Name *</FormLabel>
                 <FormControl>
-                  <Input placeholder="John" {...field} />
+                  <Input placeholder="John" maxLength={50} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -45,7 +45,7 @@ export const GuestInfoForm = ({ form }: GuestInfoFormProps) => {
               <FormItem>
                 <FormLabel>Last Name *</FormLabel>
                 <FormControl>
-                  <Input placeholder="Doe" {...field} />
+                  <Input placeholder="Doe" maxLength={50} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -60,7 +60,7 @@ export const GuestInfoForm = ({ form }: GuestInfoFormProps) => {
             <FormItem>
               <FormLabel>Email Address *</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="john.doe@example.com" {...field} />
+                <Input type="email" placeholder="john.doe@example.com" maxLength={255} {...field} />
               </FormControl>
               <FormDescription>
                 We'll send your booking confirmation to this email
@@ -77,7 +77,7 @@ export const GuestInfoForm = ({ form }: GuestInfoFormProps) => {
             <FormItem>
               <FormLabel>Phone Number *</FormLabel>
               <FormControl>
-                <Input type="tel" placeholder="+27 123 456 789" {...field} />
+                <Input type="tel" placeholder="+27 123 456 789" maxLength={20} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -95,6 +95,7 @@ export const GuestInfoForm = ({ form }: GuestInfoFormProps) => {
                   placeholder="Any special requirements or requests for your stay..."
                   className="resize-none"
                   rows={4}
+                  maxLength={500}
                   {...field}
                 />
               </FormControl>

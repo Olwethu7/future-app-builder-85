@@ -492,7 +492,84 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      public_reviews: {
+        Row: {
+          accommodation_id: string | null
+          cleanliness_rating: number | null
+          comment: string | null
+          communication_rating: number | null
+          created_at: string | null
+          experience_id: string | null
+          guest_identifier: string | null
+          helpful_count: number | null
+          host_response: string | null
+          host_response_date: string | null
+          id: string | null
+          location_rating: number | null
+          photos: string[] | null
+          rating: number | null
+          title: string | null
+          updated_at: string | null
+          value_rating: number | null
+          verified_stay: boolean | null
+        }
+        Insert: {
+          accommodation_id?: string | null
+          cleanliness_rating?: number | null
+          comment?: string | null
+          communication_rating?: number | null
+          created_at?: string | null
+          experience_id?: string | null
+          guest_identifier?: never
+          helpful_count?: number | null
+          host_response?: string | null
+          host_response_date?: string | null
+          id?: string | null
+          location_rating?: number | null
+          photos?: string[] | null
+          rating?: number | null
+          title?: string | null
+          updated_at?: string | null
+          value_rating?: number | null
+          verified_stay?: boolean | null
+        }
+        Update: {
+          accommodation_id?: string | null
+          cleanliness_rating?: number | null
+          comment?: string | null
+          communication_rating?: number | null
+          created_at?: string | null
+          experience_id?: string | null
+          guest_identifier?: never
+          helpful_count?: number | null
+          host_response?: string | null
+          host_response_date?: string | null
+          id?: string | null
+          location_rating?: number | null
+          photos?: string[] | null
+          rating?: number | null
+          title?: string | null
+          updated_at?: string | null
+          value_rating?: number | null
+          verified_stay?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_accommodation_id_fkey"
+            columns: ["accommodation_id"]
+            isOneToOne: false
+            referencedRelation: "accommodations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_experience_id_fkey"
+            columns: ["experience_id"]
+            isOneToOne: false
+            referencedRelation: "experiences"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       check_room_availability: {
