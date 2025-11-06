@@ -44,14 +44,22 @@ const Booking = () => {
 
   const form = useForm<BookingFormValues>({
     resolver: zodResolver(bookingSchema),
+    mode: "onBlur", // Only validate on blur to prevent re-renders while typing
     defaultValues: {
       firstName: "",
       lastName: "",
-      email: user?.email || "",
+      email: "",
       phone: "",
       specialRequests: "",
     },
   });
+
+  // Set email from user data once when user is loaded
+  useEffect(() => {
+    if (user?.email && !form.getValues('email')) {
+      form.setValue('email', user.email);
+    }
+  }, [user, form]);
 
   // Parse dates and guests from URL params
   const checkIn = searchParams.get("checkIn")

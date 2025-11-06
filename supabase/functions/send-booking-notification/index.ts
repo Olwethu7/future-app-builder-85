@@ -157,7 +157,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         from: "Zulu Lami Booking System <onboarding@resend.dev>",
-        to: ["wilpart3@gmail.com"],
+        to: ["developmentteam86@gmail.com"],
         subject: emailSubject,
         html: emailHtml,
       }),
@@ -170,7 +170,7 @@ serve(async (req) => {
     }
 
     const emailData = await emailResponse.json();
-    console.log(`Booking notification sent to wilpart3@gmail.com`, emailData);
+    console.log(`Booking notification sent to developmentteam86@gmail.com`, emailData);
 
     return new Response(
       JSON.stringify({ 
