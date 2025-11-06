@@ -1,6 +1,5 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
-import notificationapi from 'npm:notificationapi-node-server-sdk';
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -13,15 +12,13 @@ serve(async (req) => {
   }
 
   try {
-    // Initialize NotificationAPI
+    // Get NotificationAPI credentials
     const clientId = Deno.env.get("NOTIFICATIONAPI_CLIENT_ID");
     const clientSecret = Deno.env.get("NOTIFICATIONAPI_CLIENT_SECRET");
     
     if (!clientId || !clientSecret) {
       throw new Error("NotificationAPI credentials are not configured");
     }
-
-    notificationapi.init(clientId, clientSecret);
 
     const supabaseClient = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
@@ -30,6 +27,8 @@ serve(async (req) => {
 
     const { record } = await req.json();
     const booking = record;
+
+    console.log('Processing booking notification for booking:', booking.id);
 
     // Fetch room details
     const { data: room } = await supabaseClient
@@ -44,67 +43,96 @@ serve(async (req) => {
     // Admin email - using environment variable
     const adminEmail = Deno.env.get("ADMIN_EMAIL") || "info@zululami.com";
     
-    // Format dates
-    const checkInDate = new Date(booking.check_in_date).toLocaleDateString('en-ZA', { 
-      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
-    });
-    const checkOutDate = new Date(booking.check_out_date).toLocaleDateString('en-ZA', { 
-      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
-    });
-
+    // Format booking reference
+    const bookingRef = booking.id.substring(0, 8).toUpperCase();
+    
+    // Prepare auth header for NotificationAPI
+    const authHeader = 'Basic ' + btoa(`${clientId}:${clientSecret}`);
+    
     // Send admin notification
     console.log(`Sending admin notification to: ${adminEmail}`);
-    await notificationapi.send({
-      notificationId: 'booking_notification',
-      user: {
-        id: adminEmail,
-        email: adminEmail
+    const adminResponse = await fetch('https://api.notificationapi.com/sender/notifications', {
+      method: 'POST',
+      headers: {
+        'Authorization': authHeader,
+        'Content-Type': 'application/json',
       },
-      mergeTags: {
-        booking_reference: booking.id.substring(0, 8).toUpperCase(),
-        room_type: roomType.charAt(0).toUpperCase() + roomType.slice(1),
-        room_name: roomName,
-        check_in_date: checkInDate,
-        check_out_date: checkOutDate,
-        guests: booking.guests.toString(),
-        total_price: `R${Number(booking.total_price).toFixed(2)}`,
-        guest_name: booking.guest_name,
-        guest_email: booking.guest_email,
-        guest_phone: booking.guest_phone,
-        special_requests: booking.special_requests || 'None'
-      }
+      body: JSON.stringify({
+        notificationId: 'booking_notification',
+        user: {
+          id: adminEmail,
+          email: adminEmail
+        },
+        mergeTags: {
+          booking_reference: bookingRef,
+          room_name: roomName,
+          room_type: roomType,
+          guest_name: booking.guest_name,
+          guest_email: booking.guest_email,
+          guest_phone: booking.guest_phone,
+          check_in_date: booking.check_in_date,
+          check_out_date: booking.check_out_date,
+          guests: booking.guests.toString(),
+          total_price: booking.total_price,
+          special_requests: booking.special_requests || 'None'
+        }
+      })
     });
-    console.log(`Admin notification sent to ${adminEmail}`);
+
+    if (!adminResponse.ok) {
+      const errorData = await adminResponse.text();
+      console.error('Admin notification error:', errorData);
+      throw new Error(`Failed to send admin notification: ${adminResponse.statusText}`);
+    }
+    
+    console.log(`Admin notification sent successfully to ${adminEmail}`);
 
     // Send guest confirmation
     console.log(`Sending guest confirmation to: ${booking.guest_email}`);
-    await notificationapi.send({
-      notificationId: 'booking_confirmation',
-      user: {
-        id: booking.guest_email,
-        email: booking.guest_email
+    const guestResponse = await fetch('https://api.notificationapi.com/sender/notifications', {
+      method: 'POST',
+      headers: {
+        'Authorization': authHeader,
+        'Content-Type': 'application/json',
       },
-      mergeTags: {
-        guest_name: booking.guest_name,
-        booking_reference: booking.id.substring(0, 8).toUpperCase(),
-        room_type: roomType.charAt(0).toUpperCase() + roomType.slice(1),
-        room_name: roomName,
-        check_in_date: checkInDate,
-        check_out_date: checkOutDate,
-        guests: booking.guests.toString(),
-        total_price: `R${Number(booking.total_price).toFixed(2)}`,
-        special_requests: booking.special_requests || 'None',
-        contact_email: adminEmail
-      }
+      body: JSON.stringify({
+        notificationId: 'booking_confirmation',
+        user: {
+          id: booking.guest_email,
+          email: booking.guest_email
+        },
+        mergeTags: {
+          guest_name: booking.guest_name,
+          booking_reference: bookingRef,
+          room_name: roomName,
+          room_type: roomType,
+          check_in_date: booking.check_in_date,
+          check_out_date: booking.check_out_date,
+          guests: booking.guests.toString(),
+          total_price: booking.total_price,
+          special_requests: booking.special_requests || 'None',
+          contact_email: adminEmail
+        }
+      })
     });
-    console.log(`Guest confirmation sent to ${booking.guest_email}`);
+
+    if (!guestResponse.ok) {
+      const errorData = await guestResponse.text();
+      console.error('Guest confirmation error:', errorData);
+      // Don't throw here, admin notification is more critical
+      console.warn(`Failed to send guest confirmation to ${booking.guest_email}`);
+    } else {
+      console.log(`Guest confirmation sent successfully to ${booking.guest_email}`);
+    }
 
     return new Response(
       JSON.stringify({ 
         success: true, 
         message: "Booking notifications sent successfully via NotificationAPI",
         adminEmail: adminEmail,
-        guestEmail: booking.guest_email
+        guestEmail: booking.guest_email,
+        bookingReference: bookingRef,
+        guestNotificationSent: guestResponse.ok
       }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -115,7 +143,10 @@ serve(async (req) => {
     console.error("Error in send-booking-notification function:", error);
     const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
     return new Response(
-      JSON.stringify({ error: errorMessage }),
+      JSON.stringify({ 
+        error: errorMessage,
+        details: error instanceof Error ? error.stack : undefined
+      }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 500,
