@@ -45,9 +45,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const signUp = async (email: string, password: string, fullName: string) => {
-    const redirectUrl = `${window.location.origin}/`;
+    const redirectUrl = `${window.location.origin}/verify-email`;
     
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -57,6 +57,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         },
       },
     });
+    
+    // Send custom verification email via edge function
+    if (data.user && !error) {
+      try {
+        // Get the verification token from the session
+        const session = data.session;
+        const verificationToken = session?.access_token || '';
+        
+        await supabase.functions.invoke('send-verification-email', {
+          body: {
+            email: email,
+            fullName: fullName,
+            verificationToken: verificationToken
+          }
+        });
+        
+        console.log('Verification email sent to:', email);
+      } catch (emailError) {
+        console.error('Failed to send verification email:', emailError);
+      }
+    }
     
     return { error };
   };
