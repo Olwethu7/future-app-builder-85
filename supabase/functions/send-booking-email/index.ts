@@ -39,8 +39,8 @@ const handler = async (req: Request): Promise<Response> => {
     const checkOut = new Date(bookingData.checkOutDate);
     const nights = Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24));
 
-    // Format the email body
-    const emailBody = `
+    // Format the admin email body
+    const adminEmailBody = `
 A new booking form was submitted:
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -78,8 +78,39 @@ ${bookingData.specialRequests}` : ''}
 This is an automated notification from Zulu Lami Eco-Resort booking system.
     `.trim();
 
-    // Prepare SendGrid email payload
-    const emailPayload = {
+    // Format the guest confirmation email
+    const guestEmailBody = `
+Dear ${bookingData.guestName},
+
+Thank you for submitting your booking request to Zulu Lami Eco-Resort.
+
+This is an automatic confirmation to let you know that we have successfully received your submission. Our team will now review the details you have provided and begin working on it.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+YOUR BOOKING DETAILS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Room: ${bookingData.roomName}
+Check-in Date: ${bookingData.checkInDate}
+Check-out Date: ${bookingData.checkOutDate}
+Number of Nights: ${nights}
+Number of Guests: ${bookingData.guests}
+Total Amount: R${bookingData.totalPrice}
+
+${bookingData.specialRequests ? `Special Requests: ${bookingData.specialRequests}` : ''}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+We will notify you once the process is complete or if we require any additional information from you.
+
+We appreciate your patience.
+
+Best regards,
+The Zulu Lami Team
+    `.trim();
+
+    // Prepare SendGrid email payload for admin
+    const adminEmailPayload = {
       personalizations: [
         {
           to: [{ email: 'developmentteam86@gmail.com' }],
@@ -93,30 +124,69 @@ This is an automated notification from Zulu Lami Eco-Resort booking system.
       content: [
         {
           type: 'text/plain',
-          value: emailBody,
+          value: adminEmailBody,
         },
       ],
     };
 
-    console.log('Sending email via SendGrid...');
+    // Prepare SendGrid email payload for guest
+    const guestEmailPayload = {
+      personalizations: [
+        {
+          to: [{ email: bookingData.guestEmail }],
+          subject: 'Confirmation of Your Booking Request Submission',
+        },
+      ],
+      from: {
+        email: 'no-reply@webeasybooking.com',
+        name: 'Zulu Lami Eco-Resort',
+      },
+      content: [
+        {
+          type: 'text/plain',
+          value: guestEmailBody,
+        },
+      ],
+    };
 
-    // Send email via SendGrid API
-    const sendGridResponse = await fetch(SENDGRID_API_URL, {
+    console.log('Sending emails via SendGrid...');
+
+    // Send admin email via SendGrid API
+    const adminResponse = await fetch(SENDGRID_API_URL, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${SENDGRID_API_KEY}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(emailPayload),
+      body: JSON.stringify(adminEmailPayload),
     });
 
-    if (!sendGridResponse.ok) {
-      const errorText = await sendGridResponse.text();
-      console.error('SendGrid API error:', errorText);
-      throw new Error(`SendGrid API error: ${sendGridResponse.status} - ${errorText}`);
+    if (!adminResponse.ok) {
+      const errorText = await adminResponse.text();
+      console.error('SendGrid admin email error:', errorText);
+      throw new Error(`SendGrid API error: ${adminResponse.status} - ${errorText}`);
     }
 
-    console.log('✅ Email sent successfully to developmentteam86@gmail.com');
+    console.log('✅ Admin email sent successfully to developmentteam86@gmail.com');
+
+    // Send guest confirmation email
+    const guestResponse = await fetch(SENDGRID_API_URL, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${SENDGRID_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(guestEmailPayload),
+    });
+
+    if (!guestResponse.ok) {
+      const errorText = await guestResponse.text();
+      console.error('SendGrid guest email error:', errorText);
+      // Don't throw here, admin email was sent successfully
+      console.log('⚠️ Guest email failed but admin email succeeded');
+    } else {
+      console.log(`✅ Guest confirmation email sent successfully to ${bookingData.guestEmail}`);
+    }
 
     return new Response(
       JSON.stringify({ 
