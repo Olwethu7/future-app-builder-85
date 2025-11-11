@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useMemo } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -59,7 +59,7 @@ const PageLoader = () => (
 );
 
 const App = () => {
-  const [queryClient] = useState(
+  const queryClient = useMemo(
     () =>
       new QueryClient({
         defaultOptions: {
@@ -69,7 +69,8 @@ const App = () => {
             refetchOnWindowFocus: false,
           },
         },
-      })
+      }),
+    []
   );
 
   return (
