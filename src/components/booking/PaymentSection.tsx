@@ -10,6 +10,7 @@ interface PaymentSectionProps {
   onPaymentMethodChange: (method: string) => void;
 }
 
+
 export const PaymentSection = ({
   paymentMethod,
   onPaymentMethodChange,
