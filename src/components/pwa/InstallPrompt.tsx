@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Download, X } from "lucide-react";
 import { useState } from "react";
 
+
 export const InstallPrompt = () => {
   const { isInstallable, promptInstall } = usePWA();
   const [dismissed, setDismissed] = useState(false);
