@@ -8,6 +8,7 @@ import { ShieldAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface AdminProtectedRouteProps {
+  
   children: React.ReactNode;
 }
 
