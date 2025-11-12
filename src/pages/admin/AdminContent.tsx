@@ -1,5 +1,6 @@
 import { AdminSidebar } from "@/components/layout/AdminSidebar";
 
+
 const AdminContent = () => {
   return (
     <div className="flex min-h-screen">
