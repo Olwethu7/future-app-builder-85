@@ -1,5 +1,6 @@
 import { SearchBar } from "./SearchBar";
 
+
 export const HeroSection = () => {
   return (
     <section className="relative h-[600px] flex items-center justify-center overflow-hidden">
