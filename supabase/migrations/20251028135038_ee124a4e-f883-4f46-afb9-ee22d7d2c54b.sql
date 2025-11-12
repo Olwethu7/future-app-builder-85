@@ -1,4 +1,5 @@
 -- Add quantity field to rooms table
+
 ALTER TABLE rooms ADD COLUMN IF NOT EXISTS quantity integer NOT NULL DEFAULT 1;
 
 -- Insert accommodation types with room data
