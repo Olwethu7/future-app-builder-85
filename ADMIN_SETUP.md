@@ -4,8 +4,8 @@
 
 1. Navigate to the registration page at `/login` and click on "Register" tab
 2. Create a new account with the following credentials:
-   - **Email**: passiveincome1340@gmail.com
-   - **Password**: #Admin01
+   - **Email**: admin@zululami.com
+   - **Password**: Admin123
    - **Full Name**: Admin User
 
 3. Complete the email verification if required
@@ -21,7 +21,7 @@ Run this SQL command in your Supabase SQL Editor:
 INSERT INTO public.user_roles (user_id, role)
 SELECT id, 'admin'::app_role
 FROM auth.users
-WHERE email = 'passiveincome1340@gmail.com'
+WHERE email = 'admin@zululami.com'
 ON CONFLICT (user_id, role) DO NOTHING;
 ```
 
@@ -30,7 +30,7 @@ ON CONFLICT (user_id, role) DO NOTHING;
 Once the admin role is assigned:
 
 1. Log out and log back in with the admin credentials
-2. Navigate to `/admin/dashboard` to access the admin panel
+2. Navigate to `/admin/login` to access the admin panel
 3. You will have access to:
    - **Dashboard**: Overview of bookings, revenue, and occupancy
    - **Booking Management**: View and manage all booking requests

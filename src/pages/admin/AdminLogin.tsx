@@ -110,7 +110,19 @@ const AdminLogin = () => {
             {error && (
               <Alert variant="destructive">
                 <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{error}</AlertDescription>
+                <AlertDescription>
+                  {error}
+                  {error.includes("Invalid login credentials") && (
+                    <div className="mt-2 text-sm">
+                      <p>Please ensure you have:</p>
+                      <ol className="list-decimal ml-4 mt-1">
+                        <li>Created an account with email: admin@zululami.com</li>
+                        <li>Assigned the admin role in Supabase</li>
+                      </ol>
+                      <p className="mt-2">See ADMIN_SETUP.md for detailed instructions.</p>
+                    </div>
+                  )}
+                </AlertDescription>
               </Alert>
             )}
 
