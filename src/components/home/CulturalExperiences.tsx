@@ -16,6 +16,7 @@ export const CulturalExperiences = () => {
       exp.id === "meal-3"        // Braai Experience
     );
   }, []);
+  
 
   return (
     <section className="py-16">
