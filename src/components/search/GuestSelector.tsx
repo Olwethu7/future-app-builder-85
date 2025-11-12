@@ -6,6 +6,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
+
 interface GuestSelectorProps {
   value: { adults: number; children: number };
   onChange: (guests: { adults: number; children: number }) => void;
