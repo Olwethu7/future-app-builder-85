@@ -41,6 +41,7 @@ export const useToggleSaveAccommodation = () => {
       isSaved: boolean;
     }) => {
       if (!user) throw new Error("Not authenticated");
+      
 
       if (isSaved) {
         // Remove from saved
