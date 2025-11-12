@@ -1,4 +1,5 @@
 -- Create rooms for each accommodation type
+
 -- Get accommodation IDs and create rooms
 
 -- Create rooms for Single Room accommodation
