@@ -12,6 +12,7 @@ const highlights = [
     title: "Water Conservation",
     description: "Rainwater harvesting and greywater recycling systems",
   },
+  
   {
     icon: Recycle,
     title: "Zero Waste",
