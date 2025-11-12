@@ -26,6 +26,8 @@ const bookingSchema = z.object({
   specialRequests: z.string().max(500).optional(),
 });
 
+
+
 type BookingFormValues = z.infer<typeof bookingSchema>;
 
 const Booking = () => {
