@@ -22,6 +22,7 @@ export const useFileUpload = (bucket: string) => {
           cacheControl: "3600",
           upsert: false,
         });
+      
 
       if (uploadError) throw uploadError;
 
