@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { CheckCircle, XCircle, Loader2 } from "lucide-react";
 import { format } from "date-fns";
 
+
 export const BookingsTable = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
