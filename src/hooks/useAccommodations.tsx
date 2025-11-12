@@ -63,6 +63,7 @@ export const useAccommodation = (id: string) => {
 export const useAccommodationReviews = (accommodationId: string) => {
   return useQuery({
     queryKey: ["reviews", "accommodation", accommodationId],
+    
     queryFn: async () => {
       const { data, error } = await supabase
         .from("reviews")
