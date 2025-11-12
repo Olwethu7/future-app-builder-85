@@ -1,4 +1,5 @@
 -- Create database trigger to send booking notification email
+
 CREATE OR REPLACE FUNCTION notify_new_booking()
 RETURNS TRIGGER AS $$
 BEGIN
