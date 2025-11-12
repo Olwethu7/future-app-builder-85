@@ -6,6 +6,7 @@ import { Separator } from "@/components/ui/separator";
 
 // Mock data - will be replaced with real data from Supabase
 const reviews = [
+  
   {
     id: 1,
     author: "Sarah Thompson",
