@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
 
+
 const Settings = () => {
   const { user } = useAuth();
   const { toast } = useToast();
