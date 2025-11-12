@@ -1,4 +1,5 @@
 -- Update room images to show appropriate eco-resort images for each room type
+
 UPDATE rooms
 SET images = ARRAY['https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&auto=format&fit=crop']
 WHERE room_type = 'single';
