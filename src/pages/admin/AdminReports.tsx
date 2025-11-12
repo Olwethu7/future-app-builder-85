@@ -20,6 +20,7 @@ import {
   ResponsiveContainer 
 } from "recharts";
 
+
 const AdminReports = () => {
   const { data: stats } = useQuery({
     queryKey: ["admin-reports"],
