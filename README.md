@@ -1,4 +1,4 @@
-Project Overview
+Project Overview for Zululami Eco Resort
 This project represents a modern web application built with a focus on performance, scalability, and user-friendly design. It uses up-to-date web technologies and follows best practices to ensure smooth development and easy maintenance.
 How to Edit or Contribute
 You can manage and update the project using your preferred development tools. Developers can either work locally on their computers or make edits directly through GitHub. The project is set up for flexibility, allowing easy collaboration, version control, and updates.
