@@ -1,4 +1,5 @@
 -- Fix search_path for notify_new_booking function
+
 CREATE OR REPLACE FUNCTION notify_new_booking()
 RETURNS TRIGGER
 LANGUAGE plpgsql
