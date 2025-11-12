@@ -1,4 +1,5 @@
 -- Assign admin role to existing user
+
 -- This will grant admin privileges to nhlakasena@gmail.com
 
 INSERT INTO public.user_roles (user_id, role)
