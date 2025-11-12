@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 
+
 interface Room {
   id: string;
   name: string;
