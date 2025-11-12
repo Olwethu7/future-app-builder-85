@@ -1,4 +1,5 @@
 -- Security Enhancement: Make profile-avatars and review-photos buckets private
+
 -- This prevents unauthorized access to potentially personal images
 
 -- Update profile-avatars bucket to be private
