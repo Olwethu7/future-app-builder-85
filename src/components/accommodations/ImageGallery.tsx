@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 interface ImageGalleryProps {
   images: string[];
   name: string;
+  
 }
 
 export const ImageGallery = ({ images, name }: ImageGalleryProps) => {
