@@ -1,4 +1,5 @@
 -- Fix: Remove SECURITY DEFINER from public_reviews view
+
 -- Views should use SECURITY INVOKER (default) to enforce RLS of the querying user
 
 DROP VIEW IF EXISTS public.public_reviews;
