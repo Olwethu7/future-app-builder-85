@@ -50,6 +50,7 @@ const LocalArea = lazy(() => import("./pages/LocalArea"));
 const Gallery = lazy(() => import("./pages/Gallery"));
 
 // Admin pages
+const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
 const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
 const AdminBookingManagement = lazy(() => import("./pages/admin/AdminBookingManagement"));
 const AdminBookings = lazy(() => import("./pages/admin/AdminBookings"));
@@ -131,6 +132,8 @@ const App = () => {
             <Route path="/payment-cancel" element={<PaymentCancel />} />
             
             {/* Admin Routes */}
+            <Route path="/admin" element={<AdminLogin />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
             <Route
               path="/admin/dashboard"
               element={

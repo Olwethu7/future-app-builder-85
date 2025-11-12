@@ -22,7 +22,7 @@ export const AdminProtectedRoute = ({ children }: AdminProtectedRouteProps) => {
       if (authLoading) return;
 
       if (!user) {
-        navigate("/login", { replace: true });
+        navigate("/admin/login", { replace: true });
         return;
       }
 
@@ -78,9 +78,14 @@ export const AdminProtectedRoute = ({ children }: AdminProtectedRouteProps) => {
             <p className="text-sm text-muted-foreground">
               Admin access is required to view this page.
             </p>
-            <Button onClick={() => navigate("/")} variant="outline" className="w-full">
-              Return to Home
-            </Button>
+            <div className="flex gap-2">
+              <Button onClick={() => navigate("/admin/login")} variant="outline" className="flex-1">
+                Admin Login
+              </Button>
+              <Button onClick={() => navigate("/")} variant="outline" className="flex-1">
+                Return Home
+              </Button>
+            </div>
           </AlertDescription>
         </Alert>
       </div>
