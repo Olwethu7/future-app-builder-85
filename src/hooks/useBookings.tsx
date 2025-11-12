@@ -18,6 +18,7 @@ interface CreateBookingData {
 export const useBookings = () => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  
 
   // Real-time subscription for bookings
   useEffect(() => {
