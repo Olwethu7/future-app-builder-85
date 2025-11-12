@@ -2,6 +2,7 @@ import { Facebook, MessageCircle, Mail, Phone, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
+
 export const Footer = () => {
   return (
     <footer className="bg-primary text-background py-12">
