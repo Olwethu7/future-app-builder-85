@@ -27,6 +27,7 @@ export const useRoomAvailability = (
       });
 
       if (error) throw error;
+      
       return data;
     },
     enabled: !!roomId,
