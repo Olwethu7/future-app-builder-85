@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface ProtectedRouteProps {
+  
   children: React.ReactNode;
 }
 
