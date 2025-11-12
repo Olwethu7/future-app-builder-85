@@ -8,6 +8,7 @@ import { GuestSelector } from "@/components/search/GuestSelector";
 import { format } from "date-fns";
 import { DateRange } from "react-day-picker";
 
+
 export const SearchBar = () => {
   const navigate = useNavigate();
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
