@@ -6,6 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 
+
 export interface FilterState {
   priceRange: [number, number];
   amenities: string[];
