@@ -8,6 +8,7 @@ interface QuickActionsProps {
 }
 
 export const QuickActions = ({ pendingCount }: QuickActionsProps) => {
+  
   const navigate = useNavigate();
 
   const actions = [
