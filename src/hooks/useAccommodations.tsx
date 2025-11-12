@@ -76,3 +76,4 @@ export const useAccommodationReviews = (accommodationId: string) => {
     enabled: !!accommodationId,
   });
 };
+
