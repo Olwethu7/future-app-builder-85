@@ -1,4 +1,5 @@
 -- Create function to reduce room quantity when booking is approved
+
 CREATE OR REPLACE FUNCTION public.handle_booking_approval()
 RETURNS TRIGGER
 LANGUAGE plpgsql
